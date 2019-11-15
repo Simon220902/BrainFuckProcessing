@@ -10,18 +10,29 @@ Der vil være to forskellige operationer for at skubbe en opcode og et argument,
 
 Jeg uvider derfor brainfucks operationssæt med to ¿CHARACTERS? nemlig : og ; hvor den første er pushOPCODE og den anden er pushARG.  
 
-Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.
+Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
+
+Opcode	|Funktion	|Argumenter	|Beskrivelse
+---|---|---|---
+0|	size|	width, height|		sæt skærm til width, height
+1|	fillGrey|	greyscale|		sæt fill-farven med et argument mellem 0-255
+2|	fill|	r,g,b|	sæt fill-farven med r,g,b værdier som argumenter
+3|	backgroundGrey|	greyscale|	sæt baggrundsfarven med et argument mellem 0-255
+4|	background|	r,g,b|	sæt baggrundsfarven med r,g,b værdier som argumenter
+5|	rect|	x, y, w, h|	tegn et rektangel ved x, y som er w bredt og h højt
+6|	circle|	x, y, r|	tegn en cirkel ved x, y med radius r
+7|	line|	x1, y1, x2, y2|	tegn en linje mellem punktet x1, y1 og x2, y2
+
+
+
+Her er en gif af hvordan jeg forestiller mig at stacken kommer til at fungere.  
+
+
+
+
+
+
 ![Image](Icon-pictures.png "icon")
-
-Her er en gif af hvordan jeg forestiller mig at stacken kommer til at fungere.
-
-
-Text attributes _italic_, 
-**bold**, `monospace`.
-
-Horizontal rule:
-
----
 
 Strikethrough:
 ~~stikethrough~~
@@ -42,6 +53,6 @@ An [example](http://example.com).
 
 ![Image](Icon-pictures.png "icon")
 
-> Markdown uses email-style > characters for blockquoting.
+> Markdown uses email-style  > characters for blockquoting.
 
 Inline <abbr title="Hypertext Markup Language">HTML</abbr> is supported.

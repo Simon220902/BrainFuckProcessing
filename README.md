@@ -25,34 +25,5 @@ Opcode	|Funktion	|Argumenter	|Beskrivelse
 
 
 
-Her er en gif af hvordan jeg forestiller mig at stacken kommer til at fungere.  
-
-
-
-
-
-
-![Image](Icon-pictures.png "icon")
-
-Strikethrough:
-~~stikethrough~~
-
-Bullet list:
-
-  * apples
-  * oranges
-  * pears
-
-Numbered list:
-
-  1. lather
-  2. rinse
-  3. repeat
-
-An [example](http://example.com).
-
-![Image](Icon-pictures.png "icon")
-
-> Markdown uses email-style  > characters for blockquoting.
-
-Inline <abbr title="Hypertext Markup Language">HTML</abbr> is supported.
+Her er et billede af hvordan jeg forestiller mig at stacken kommer til at fungere.  
+![](stack.png)

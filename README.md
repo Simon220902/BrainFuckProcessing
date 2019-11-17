@@ -5,7 +5,7 @@ Brainfuck med p5.js
 
 Bestanddele  
 * Brainfuck interpreter  
-..* Selve fortolkeren  
+⋅⋅⋅* Selve fortolkeren  
 ..* Stepthrough værktøjer m.m.  
 * Funktions stack evaluator  
 ..* Selve evaluerings mekanismen  

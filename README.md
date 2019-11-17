@@ -4,12 +4,12 @@ Brainfuck med p5.js
 ## Ideén  
 
 Bestanddele  
-* Brainfuck interpreter
-⋅⋅* Selve fortolkeren
-⋅⋅* Stepthrough værktøjer m.m.
-* Funktions stack evaluator
-⋅⋅* Selve evaluerings mekanismen
-⋅⋅* De individuelle opcodes
+* Brainfuck interpreter  
+⋅⋅* Selve fortolkeren  
+⋅⋅* Stepthrough værktøjer m.m.  
+* Funktions stack evaluator  
+⋅⋅* Selve evaluerings mekanismen  
+⋅⋅* De individuelle opcodes  
 
 En brainfuck intrepreter lavet i p5 med gode visualiseringer og stepthrough muligheder af eksikveringen af brainfuck koden. Det ville gøre jeg kunne hoste det som en github.io side og det ville være nemmere at have et rent tekst input felt med koden. Derudover kunne man også give den nødvendige forklaring i noget ovenstående html osv.
 

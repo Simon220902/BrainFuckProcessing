@@ -5,8 +5,7 @@ class Interpreter{
 		this.program = program;
 		this.programIndex = 0;
 		this.loopStart = [];
-		this.outPut = "";
-		this.iterations = 0;
+		this.output = "";
 	}
 
 	eval(){
@@ -62,10 +61,14 @@ class Interpreter{
 	}
 	printChar(){
 		console.log(String.fromCharCode(this.tape[this.tapeIndex]));
-		this.outPut += String.fromCharCode(this.tape[this.tapeIndex]);
+		this.output += String.fromCharCode(this.tape[this.tapeIndex]);
 	}
 	getChar(){
-		this.tape[tape.index] = String.charCodeAt(prompt('Insert char at'+this.tapeIndex, ''));
+		let char = prompt('Which character do you want to insert at '+this.tapeIndex, '');
+		while (char.length !== 1){
+			char = prompt('Please insert a single character only '+this.tapeIndex, '');
+		}
+		this.tape[this.tapeIndex] = char.charCodeAt();
 	}
 	loopOpening(){
 		if (this.tape[this.tapeIndex] !== 0){
@@ -96,6 +99,3 @@ class Interpreter{
 
 	}
 }
-
-let helloWorldProgram = " ++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
-let interp = new Interpreter(helloWorldProgram);

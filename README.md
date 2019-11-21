@@ -23,7 +23,7 @@ Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og retur
 
 Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 ---|---|---|---|---
-0|	resizeCanvas|	width, height| Intet|	sæt skærm til width, height (Default værdi 500x500)
+0|	resizeCanvas|	width, height| Intet|	sæt skærm til width, height (Default værdi 255x255)
 1|	fillGrey|	greyscale| Intet|		sæt fill-farven med et argument mellem 0-255
 2|	fill|	r,g,b| Intet|	sæt fill-farven med r,g,b værdier som argumenter
 3|	backgroundGrey|	greyscale | Intet|	sæt baggrundsfarven med et argument mellem 0-255
@@ -37,7 +37,11 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 11|  mouseIsPressed| Intet| if(mouseIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver klikket med musen lige nu
 12|  mouseX| Intet| tape[i]=mouseX| sætter den aktuelle celle til musens x værdi
 13| mouseY| Intet| tape[i]=mouseY| sætter den aktuelle celle til musens y værdi
-  
+14| *| a, b| stack: a*b| Når dette er evalueret vil dette fungere som et argument
+15| / | a, b| stack: a/b| Når dette er evalueret vil dette fungere som et argument
+16| +| a, b| stack: a+b| Når dette er evalueret vil dette fungere som et argument
+17| -| a, b| stack: a-b| Når dette er evalueret vil dette fungere som et argument
+
 
 Her er nogle af de vigtige værdier for keyCode:
 <table>

@@ -2,24 +2,23 @@ let x = 100;
 let y = 100;
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(255, 255);
 }
 
 function draw() {
-  if (keyIsPressed){
-
-  background(0);
-  fill(255);
+  if (mouseX <= width && mouseX >= 0){
+    x = mouseX;
+  }else if(mouseY <= height && mouseY >= 0){
+    y = mouseY;
+  }
+  if (mouseIsPressed){
+    background(0);
+    fill(255);
   }
   else{
     background(255);
     fill(0);
   }
-  text(keyCode, 10, 30);
-  if (y < height ){
-      y++;
-  }else{
-      y=0;
-  }
-  circle(x, y, 50);
+  text(mouseY, 10, 30);
+  circle(x, y, 25);
 }

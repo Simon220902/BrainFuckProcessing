@@ -75,14 +75,13 @@ class Interpreter{
 		if (this.tape[this.tapeIndex] !== 0){
 			this.loopStart.push(this.programIndex);
 		}else{
-			this.programIndex = this.loopEnd(this.programIndex);
+			this.programIndex = this.loopEnd(this.programIndex)+1;
 		}
 	}
 	loopClosing(){
 		if (this.tape[this.tapeIndex] === 0){
 			this.loopStart.pop();
 		}else{
-			this.iterations++;
 			this.programIndex = this.loopStart[this.loopStart.length-1];
 		}
 	}

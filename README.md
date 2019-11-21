@@ -22,7 +22,7 @@ Jeg uvider derfor brainfucks operationssæt med to symboler nemlig : og ; hvor d
 Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
 
 Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
----|---|---|---
+---|---|---|---|---
 0|	size|	width, height| Intet|		sæt skærm til width, height (Default værdi 500x500)
 1|	fillGrey|	greyscale| Intet|		sæt fill-farven med et argument mellem 0-255
 2|	fill|	r,g,b| Intet|	sæt fill-farven med r,g,b værdier som argumenter

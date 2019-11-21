@@ -34,7 +34,35 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 8|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
 9|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
 10| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
+<style>.table {
+  width: 50%;
+  table-layout: fixed;
+  margin: auto;
+  margin-top: 5vh;
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.04);
+  border-radius: 5px;
+  border-collapse: collapse;
+}
 
+.table-body {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  height: 77vh;
+  background: #fff;
+}
+
+.table thead tr {
+  display: block;
+  border-radius: 5px;
+}
+
+.table thead {
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 1px solid #a2e2ff;
+  background-color: #b9e9ff;
+}</style>
 <table>
       <thead>
         <tr>

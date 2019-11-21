@@ -9,18 +9,22 @@
 
 <body>
     <script>
-        function run() {
+      function run() {
             let program = document.getElementById("program").value;
             let interp = new Interpreter(program);
             interp.eval();
             document.getElementById("output").innerHTML = interp.output;
-        }
+      }
     </script>
     <h1> OHHHH WAUW kør noget BRAINFUCK KODE</h1>
+    <tr id="tape">
+
+    </tr>
     <form>
-        <textarea type="text" id="program" cols=150 rows=12>++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.</textarea>
+        <textarea type="text" id="program" cols=150 rows=12>++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.>,.</textarea>
         <input type="button" value="execute" onclick="run()">
     </form>
+
     <p id="output"></p>
-    <!--<script type="text/javascript" src="sketch.js"></script>-->
+    <script type="text/javascript" src="sketch.js"></script>
 </body>

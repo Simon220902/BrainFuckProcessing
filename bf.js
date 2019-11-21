@@ -1,13 +1,14 @@
 class Interpreter{
 	constructor(program){
-		this.tape = new Uint8Array(100);
+		this.tape = new Uint8Array(30000);
 		this.tapeIndex = this.tape.length/2;
-		this.program = program;
+		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
+		this.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;]/gi,"");
 		this.programIndex = 0;
 		this.loopStart = [];
 		this.output = "";
+		this.done = false;
 	}
-
 	eval(){
 		for(;this.programIndex < this.program.length; this.programIndex++){
 			let char = this.program[this.programIndex];
@@ -87,7 +88,6 @@ class Interpreter{
 	}
 	pushOPC(){}
 	pushARG(){}
-
 	loopEnd(index){
 		for (let iadd=0;iadd+index<this.program.length;iadd++){
 			if (this.program[index+iadd]=="]"){

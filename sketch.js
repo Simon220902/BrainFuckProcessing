@@ -6,7 +6,7 @@ function setup() {
 }
 
 function draw() {
-  background(220);
+  background(0);
   if (y < height ){
       y++;
   }else{

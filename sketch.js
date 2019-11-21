@@ -6,7 +6,16 @@ function setup() {
 }
 
 function draw() {
+  if (keyIsPressed){
+
   background(0);
+  fill(255);
+  }
+  else{
+    background(255);
+    fill(0);
+  }
+  text(key, 10, 30);
   if (y < height ){
       y++;
   }else{

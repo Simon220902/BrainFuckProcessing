@@ -23,7 +23,7 @@ Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og retur
 
 Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 ---|---|---|---|---
-0|	size|	width, height| Intet|		sæt skærm til width, height (Default værdi 500x500)
+0|	resizeCanvas|	width, height| Intet|	sæt skærm til width, height (Default værdi 500x500)
 1|	fillGrey|	greyscale| Intet|		sæt fill-farven med et argument mellem 0-255
 2|	fill|	r,g,b| Intet|	sæt fill-farven med r,g,b værdier som argumenter
 3|	backgroundGrey|	greyscale | Intet|	sæt baggrundsfarven med et argument mellem 0-255
@@ -31,6 +31,9 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 5|	rect|	x, y, w, h | Intet|	tegn et rektangel ved x, y som er w bredt og h højt
 6|	circle|	x, y, r | Intet|	tegn en cirkel ved x, y med radius r
 7|	line|	x1, y1, x2, y2 | Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
+8|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
+9|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af tasten (kun ascii-værdierne)
+10| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af en af speciel tasterne, værdierne kan ses nedenunder
 
 Her er et billede af hvordan jeg forestiller mig at stacken kommer til at fungere.  
 ![](stack.png)

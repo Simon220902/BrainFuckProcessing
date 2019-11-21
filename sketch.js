@@ -8,7 +8,8 @@ function setup() {
 function draw() {
   if (mouseX <= width && mouseX >= 0){
     x = mouseX;
-  }else if(mouseY <= height && mouseY >= 0){
+  }
+  if(mouseY <= height && mouseY >= 0){
     y = mouseY;
   }
   if (mouseIsPressed){

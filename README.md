@@ -29,12 +29,16 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 3|	backgroundGrey|	greyscale | Intet|	sæt baggrundsfarven med et argument mellem 0-255
 4|	background|	r,g,b | Intet|	sæt baggrundsfarven med r,g,b værdier som argumenter
 5|	rect|	x, y, w, h | Intet|	tegn et rektangel ved x, y som er w bredt og h højt
-6|	circle|	x, y, r | Intet|	tegn en cirkel ved x, y med radius r
+6|	circle|	x, y, d | Intet|	tegn en cirkel ved x, y med diameter d
 7|	line|	x1, y1, x2, y2 | Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
 8|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
 9|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
 10| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
+11|  mouseIsPressed| Intet| if(mouseIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver klikket med musen lige nu
+12|  mouseX| Intet| tape[i]=mouseX| sætter den aktuelle celle til musens x værdi
+13| mouseY| Intet| tape[i]=mouseY| sætter den aktuelle celle til musens y værdi
   
+
 Her er nogle af de vigtige værdier for keyCode:
 <table>
       <thead>

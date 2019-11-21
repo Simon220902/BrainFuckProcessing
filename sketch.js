@@ -15,7 +15,7 @@ function draw() {
     background(255);
     fill(0);
   }
-  text(key, 10, 30);
+  text(keyCode, 10, 30);
   if (y < height ){
       y++;
   }else{

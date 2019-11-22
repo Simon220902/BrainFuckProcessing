@@ -17,7 +17,7 @@ Derudover skal der være et brainfuck interface til p5s tegne funktioner.
 Det skal ske gennem et stack, hvor man lægger en funktion på (i form af en opcode), der eksikveres når det rette antal argumenter er givet.  
 Der vil være to forskellige operationer for at skubbe en opcode og et argument, da man også skal kunne bruge evaluerede opcodes til argument.
 
-Jeg udvider derfor brainfucks operationssæt med to symboler nemlig : og ; hvor den første er pushOPCODE og den anden er pushARG.
+Jeg udvider derfor brainfucks operationssæt med tre symboler nemlig **:**, **;** og **?** hvor den første er pushOPCODE og den anden er pushARG, den tredje er til at poppe fra stacken til den nuværende celle.
 
 Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
 
@@ -32,16 +32,16 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 6|	circle|	x, y, d | Intet|	tegn en cirkel ved x, y med diameter d
 7|	line|	x1, y1, x2, y2 | Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
 8|	text| string, x, y| Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
-9|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
-10|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
-11| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
-12|  mouseIsPressed| Intet| if(mouseIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver klikket med musen lige nu
-13|  mouseX| Intet| tape[i]=mouseX| sætter den aktuelle celle til musens x værdi
-14| mouseY| Intet| tape[i]=mouseY| sætter den aktuelle celle til musens y værdi
-15| *| a, b| stack: a*b| Når dette er evalueret vil dette fungere som et argument
-16| / | a, b| stack: a/b| Når dette er evalueret vil dette fungere som et argument
-17| +| a, b| stack: a+b| Når dette er evalueret vil dette fungere som et argument
-18| -| a, b| stack: a-b| Når dette er evalueret vil dette fungere som et argument
+9|  keyIsPressed| Intet| if(keyIsPressed){stack: 1}else{stack: 0} | om der bliver trykket på en tast lige nu. Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+10|  key| Intet| stack: key| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken. Hvilkle tast der blev trykket på (kun ascii-værdierne)
+11| keyCode| Intet| stack: keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
+12|  mouseIsPressed| Intet| if(mouseIsPressed){stack: 1}else{stack: 0} | om der bliver klikket med musen lige nu. Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+13|  mouseX| Intet| stack: mouseX| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+14| mouseY| Intet| stack: mouseY| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+15| *| a, b| stack: a*b| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+16| / | a, b| stack: a/b| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+17| +| a, b| stack: a+b| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+18| -| a, b| stack: a-b| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
 19|	give string as arg|	ascii-value of char until char equals 0 | if(char!==0){string+=char}else{stack: string}|	Den tager en char der pushes som argument indtil char er lig 0 (som er et lidt meningsløst ascii-symbol)
 
 Her er nogle af de vigtige værdier for keyCode:
@@ -59,6 +59,10 @@ For en fuld liste af alle keyCode værdier [kan findes her](http://keycode.info/
 
 Her er et billede af hvordan jeg forestiller mig at stacken kommer til at fungere.  
 ![](stack.png)
+
+Stacken bliver lidt ligesom Forth, men dog med normal polsk notation.
+
+
 
 Ligesom der i p5 er en draw funktion, man kan køre igen og igen tror jeg det også må være essentielt at få lavet et uendeligt loop i BF (altså den må ikke bare timeoute (man kunne sige hvis der var en opcode i et loop, så var der ingen bund) og da det er client-side skal vi ikke være bange for nogle kæmpe hosting regninger)
 

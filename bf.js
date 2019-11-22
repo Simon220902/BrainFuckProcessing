@@ -1,7 +1,7 @@
 class Interpreter{
 	constructor(program){
 		this.tape = new Uint8Array(30000);
-		this.tapeIndex = this.tape.length/2;
+		this.tapeIndex = 0;
 		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
 		this.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;]/gi,"");
 		this.programIndex = 0;

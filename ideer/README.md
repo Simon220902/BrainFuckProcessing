@@ -21,17 +21,39 @@ Jeg uvider derfor brainfucks operationssæt med to symboler nemlig : og ; hvor d
 
 Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
 
-Opcode	|Funktion	|Argumenter	|Beskrivelse
----|---|---|---
-0|	size|	width, height|		sæt skærm til width, height (Default værdi 500x500)
-1|	fillGrey|	greyscale|		sæt fill-farven med et argument mellem 0-255
-2|	fill|	r,g,b|	sæt fill-farven med r,g,b værdier som argumenter
-3|	backgroundGrey|	greyscale|	sæt baggrundsfarven med et argument mellem 0-255
-4|	background|	r,g,b|	sæt baggrundsfarven med r,g,b værdier som argumenter
-5|	rect|	x, y, w, h|	tegn et rektangel ved x, y som er w bredt og h højt
-6|	circle|	x, y, r|	tegn en cirkel ved x, y med radius r
-7|	line|	x1, y1, x2, y2|	tegn en linje mellem punktet x1, y1 og x2, y2
+Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
+---|---|---|---|---
+0|	resizeCanvas|	width, height| Intet|	sæt skærm til width, height (Default værdi 255x255)
+1|	fillGrey|	greyscale| Intet|		sæt fill-farven med et argument mellem 0-255
+2|	fill|	r,g,b| Intet|	sæt fill-farven med r,g,b værdier som argumenter
+3|	backgroundGrey|	greyscale | Intet|	sæt baggrundsfarven med et argument mellem 0-255
+4|	background|	r,g,b | Intet|	sæt baggrundsfarven med r,g,b værdier som argumenter
+5|	rect|	x, y, w, h | Intet|	tegn et rektangel ved x, y som er w bredt og h højt
+6|	circle|	x, y, d | Intet|	tegn en cirkel ved x, y med diameter d
+7|	line|	x1, y1, x2, y2 | Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
+8|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
+9|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
+10| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
+11|  mouseIsPressed| Intet| if(mouseIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver klikket med musen lige nu
+12|  mouseX| Intet| tape[i]=mouseX| sætter den aktuelle celle til musens x værdi
+13| mouseY| Intet| tape[i]=mouseY| sætter den aktuelle celle til musens y værdi
+14| *| a, b| stack: a*b| Når dette er evalueret vil dette fungere som et argument
+15| / | a, b| stack: a/b| Når dette er evalueret vil dette fungere som et argument
+16| +| a, b| stack: a+b| Når dette er evalueret vil dette fungere som et argument
+17| -| a, b| stack: a-b| Når dette er evalueret vil dette fungere som et argument
 
+
+Her er nogle af de vigtige værdier for keyCode:
+<table>
+      <thead>
+        <tr>
+          <th>Key Code</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr><td>0</td><td>That key has no keycode</tr><tr><td>8</td><td>backspace / delete</tr><tr><td>13</td><td>enter</td></tr><tr><td>16</td><td>shift</td></tr><tr><td>32</td><td>spacebar</td></tr><tr><td>37</td><td>left arrow</td></tr><tr><td>38</td><td>up arrow</td></tr><tr><td>39</td><td>right arrow</td></tr><tr><td>40</td><td>down arrow</td></tr><tr><td>48</td><td>0</td></tr><tr><td>49</td><td>1</td></tr><tr><td>50</td><td>2</td></tr><tr><td>51</td><td>3</td></tr><tr><td>52</td><td>4</td></tr><tr><td>53</td><td>5</td></tr><tr><td>54</td><td>6</td></tr><tr><td>55</td><td>7</td></tr><tr><td>56</td><td>8</td></tr><tr><td>57</td><td>9</td></tr><tr><td>65</td><td>a</td></tr><tr><td>66</td><td>b</td></tr><tr><td>67</td><td>c</td></tr><tr><td>68</td><td>d</td></tr><tr><td>69</td><td>e</td></tr><tr><td>70</td><td>f</td></tr><tr><td>71</td><td>g</td></tr><tr><td>72</td><td>h</td></tr><tr><td>73</td><td>i</td></tr><tr><td>74</td><td>j</td></tr><tr><td>75</td><td>k</td></tr><tr><td>76</td><td>l</td></tr><tr><td>77</td><td>m</td></tr><tr><td>78</td><td>n</td></tr><tr><td>79</td><td>o</td></tr><tr><td>80</td><td>p</td></tr><tr><td>81</td><td>q</td></tr><tr><td>82</td><td>r</td></tr><tr><td>83</td><td>s</td></tr><tr><td>84</td><td>t</td></tr><tr><td>85</td><td>u</td></tr><tr><td>86</td><td>v</td></tr><tr><td>87</td><td>w</td></tr><tr><td>88</td><td>x</td></tr><tr><td>89</td><td>y</td></tr><tr><td>90</td><td>z</td></td></tr></tbody>
+</table>
 
 Her er et billede af hvordan jeg forestiller mig at stacken kommer til at fungere.  
 ![](stack.png)

@@ -94,7 +94,7 @@ class Interpreter{
 			}else if(this.program[index+iadd]=="["){
 				iadd = this.loopEnd(index+iadd);
 			}
-		}
-
+		
+	}
 	}
 }

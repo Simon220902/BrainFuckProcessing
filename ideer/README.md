@@ -17,7 +17,7 @@ Derudover skal der være et brainfuck interface til p5s tegne funktioner.
 Det skal ske gennem et stack, hvor man lægger en funktion på (i form af en opcode), der eksikveres når det rette antal argumenter er givet.  
 Der vil være to forskellige operationer for at skubbe en opcode og et argument, da man også skal kunne bruge evaluerede opcodes til argument.
 
-Jeg uvider derfor brainfucks operationssæt med to symboler nemlig : og ; hvor den første er pushOPCODE og den anden er pushARG.
+Jeg udvider derfor brainfucks operationssæt med to symboler nemlig : og ; hvor den første er pushOPCODE og den anden er pushARG.
 
 Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
 

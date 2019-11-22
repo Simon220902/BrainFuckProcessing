@@ -1,69 +1,97 @@
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"/>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
-    <script type="text/javascript" src="bf.js"></script>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"/>
+	<link rel="stylesheet" href="styles.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+	<script src="bf.js"></script>
 </head>
 <body>
-        <script>
-            //Hvorfor vil den ikke opdatere!!
-            //let examplePrograms = document.getElementById("examples");
-            //console.log(examplePrograms);
-            //document.getElementById("code").value = examplePrograms.options[examplePrograms.selectedIndex].value;
-            let interp;
-            function run() {
-                    program = document.getElementById("code").value;
-                    interp = new Interpreter(program);
-                    interp.eval();
-                    document.getElementById("output").innerHTML = interp.output;
-            }
-            /*function changeProgram(){
-                program = examplePrograms.options[examplePrograms.selectedIndex].value;
-                console.log(program);
-                document.getElementById("code").value = program;
-            }*/
+		<script>
+			let program;
+			let interp;
+			let examplePrograms;
+			//Man kan først få adgang til elementerne efter at de er etableret i DOM'en
+			window.onload = function () {
+				examplePrograms = document.getElementById("examples");
+				program = examplePrograms.options[examplePrograms.selectedIndex].value;
+				document.getElementById("code").value = program;
+				interp = new Interpreter(program);
+			};
+			//Denne kører koden der står i kode vinduet på "en gang" og propper resultatet i output paragraph
+			function run() {
+					program = document.getElementById("code").value;
+					interp = new Interpreter(program);
+					interp.eval();
+					document.getElementById("output").innerHTML = interp.output;
+					updateTape();
+			}
+			//Hvis der vælges et andet eksempel program, så skifter vi koden i kode vinduet
+			function changeProgram(){
+				program = examplePrograms.options[examplePrograms.selectedIndex].value;
+				console.log(program);
+				document.getElementById("code").value = program;
+			}
 
-        </script>
-    <h1>Brainfuck with P5</h1>
-    <p>This was made as a school project. Find more information at <a href="https://github.com/simon220902/BrainFuckProcessing">the readme of my git.</a></p>
-    <h3>Tape</h3>
-    <div class="table-responsive">
-        <table class="table">
-            <thead style="background-color: #ffffff21">
-                <tr>
-                    <th id="t0">0</th>
-                    <th id="t1">0</th>
-                    <th id="t2">0</th>
-                    <th id="t3">0</th>
-                    <th id="t4">0</th>
-                    <th id="t5">0</th>
-                    <th id="t6">0</th>
-                    <th id="t7">0</th>
-                    <th id="t8">0</th>
-                    <th id="t9">0</th>
-                </tr>
-        </table>
-    </div>
-    <h3>Code</h3>
-    <textarea id="code" cols=100 rows=20></textarea> 
-    <button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>
-    <select id="examples" onchange="changeProgram();">
-        <option value="++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++." selected="selected">Hello world</option>
-        <option value="26 +++++ +++++ +++++ +++++ +++++ +>
-                A  +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++
-                   <
-                   [>.+<-]">Alphabet</option>
-        <option value="">Pong</option>
-    </select>
-    <h3>Output</h3>
-    <p style="height: 100;" id="output"></p>
-    <h1>A quick guide</h1>
-    <p></p>
-    <script type="text/javascript" src="sketch.js"></script>
+			function updateTape(){
+				if (interp.tapeIndex >= 9){
+					for (let i = 0; i < 10; i++){
+						let cell = document.getElementById("t"+i.toString())
+						cell.innerHTML = interp.tape[interp.tapeIndex+i-5];
+						cell.style.backgroundColor = "#bbb4b4";
+					}
+					document.getElementById("t5").style.background="red";
+				}
+				else{
+					for (let i = 0; i < 10; i++){
+						let cell = document.getElementById("t"+i.toString())
+						cell.innerHTML = interp.tape[i];
+						cell.style.backgroundColor = "#bbb4b4";
+					}
+					document.getElementById("t"+interp.tapeIndex.toString()).style.backgroundColor="red";
+				}
+			}
+		</script>
+
+	<h1>Brainfuck with P5</h1>
+	<p>This was made as a school project. Find more information at <a href="https://github.com/simon220902/BrainFuckProcessing">the readme of my git.</a></p>
+	<h3>Tape</h3>
+	<div class="table-responsive">
+		<table class="table">
+			<thead style="background-color: #ffffff21">
+				<tr>
+					<th id="t0">0</th>
+					<th id="t1">0</th>
+					<th id="t2">0</th>
+					<th id="t3">0</th>
+					<th id="t4">0</th>
+					<th id="t5">0</th>
+					<th id="t6">0</th>
+					<th id="t7">0</th>
+					<th id="t8">0</th>
+					<th id="t9">0</th>
+				</tr>
+		</table>
+	</div>
+	<h3>Code</h3>
+	<textarea id="code" cols=100 rows=20></textarea> 
+	<button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>
+	<select id="examples" onchange="changeProgram()">
+		<option value="++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++." selected="selected">Hello world</option>
+		<option value=">+++++++++[<+++++++++++>-]<[>[-]>[-]<<[>+>+<<-]>>[<<+>>-]>>> [-]<<<+++++++++<[>>>+<<[>+>[-]<<-]>[<+>-]>[<<++++++++++>>>+< -]<<-<-]+++++++++>[<->-]>>+>[<[-]<<+>>>-]>[-]+<<[>+>-<<-]<<< [>>+>+<<<-]>>>[<<<+>>>-]>[<+>-]<<-[>[-]<[-]]>>+<[>[-]<-]<+++ +++++[<++++++<++++++>>-]>>>[>+>+<<-]>>[<<+>>-]<[<<<<<.>>>>>- ]<<<<<<.>>[-]>[-]++++[<++++++++>-]<.>++++[<++++++++>-]<++.>+ ++++[<+++++++++>-]<.><+++++..--------.-------.>>[>>+>+<<<-]> >>[<<<+>>>-]<[<<<<++++++++++++++.>>>>-]<<<<[-]>++++[<+++++++ +>-]<.>+++++++++[<+++++++++>-]<--.---------.>+++++++[<------ ---->-]<.>++++++[<+++++++++++>-]<.+++..+++++++++++++.>++++++ ++[<---------->-]<--.>+++++++++[<+++++++++>-]<--.-.>++++++++ [<---------->-]<++.>++++++++[<++++++++++>-]<++++.----------- -.---.>+++++++[<---------->-]<+.>++++++++[<+++++++++++>-]<-. >++[<----------->-]<.+++++++++++..>+++++++++[<---------->-]< -----.---.>>>[>+>+<<-]>>[<<+>>-]<[<<<<<.>>>>>-]<<<<<<.>>>+++ +[<++++++>-]<--.>++++[<++++++++>-]<++.>+++++[<+++++++++>-]<. ><+++++..--------.-------.>>[>>+>+<<<-]>>>[<<<+>>>-]<[<<<<++ ++++++++++++.>>>>-]<<<<[-]>++++[<++++++++>-]<.>+++++++++[<++ +++++++>-]<--.---------.>+++++++[<---------->-]<.>++++++[<++ +++++++++>-]<.+++..+++++++++++++.>++++++++++[<---------->-]< -.---.>+++++++[<++++++++++>-]<++++.+++++++++++++.++++++++++. ------.>+++++++[<---------->-]<+.>++++++++[<++++++++++>-]<-. -.---------.>+++++++[<---------->-]<+.>+++++++[<++++++++++>- ]<--.+++++++++++.++++++++.---------.>++++++++[<---------->-] <++.>+++++[<+++++++++++++>-]<.+++++++++++++.----------.>++++ +++[<---------->-]<++.>++++++++[<++++++++++>-]<.>+++[<-----> -]<.>+++[<++++++>-]<..>+++++++++[<--------->-]<--.>+++++++[< ++++++++++>-]<+++.+++++++++++.>++++++++[<----------->-]<++++ .>+++++[<+++++++++++++>-]<.>+++[<++++++>-]<-.---.++++++.---- ---.----------.>++++++++[<----------->-]<+.---.[-]<<<->[-]>[ -]<<[>+>+<<-]>>[<<+>>-]>>>[-]<<<+++++++++<[>>>+<<[>+>[-]<<-] >[<+>-]>[<<++++++++++>>>+<-]<<-<-]+++++++++>[<->-]>>+>[<[-]< <+>>>-]>[-]+<<[>+>-<<-]<<<[>>+>+<<<-]>>>[<<<+>>>-]<>>[<+>-]< <-[>[-]<[-]]>>+<[>[-]<-]<++++++++[<++++++<++++++>>-]>>>[>+>+ <<-]>>[<<+>>-]<[<<<<<.>>>>>-]<<<<<<.>>[-]>[-]++++[<++++++++> -]<.>++++[<++++++++>-]<++.>+++++[<+++++++++>-]<.><+++++..--- -----.-------.>>[>>+>+<<<-]>>>[<<<+>>>-]<[<<<<++++++++++++++ .>>>>-]<<<<[-]>++++[<++++++++>-]<.>+++++++++[<+++++++++>-]<- -.---------.>+++++++[<---------->-]<.>++++++[<+++++++++++>-] <.+++..+++++++++++++.>++++++++[<---------->-]<--.>+++++++++[ <+++++++++>-]<--.-.>++++++++[<---------->-]<++.>++++++++[<++ ++++++++>-]<++++.------------.---.>+++++++[<---------->-]<+. >++++++++[<+++++++++++>-]<-.>++[<----------->-]<.+++++++++++ ..>+++++++++[<---------->-]<-----.---.+++.---.[-]<<<]">Bottles</option>
+		<option value="26 +++++ +++++ +++++ +++++ +++++ +>
+				A  +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++
+				   <
+				   [>.+<-]">Alphabet</option>
+		<option value="">Pong</option>
+	</select>
+	<h3>Output</h3>
+	<p style="height: 100;" id="output"></p>
+	<h1>A quick guide</h1>
+	<p></p>
+	<script type="text/javascript" src="sketch.js"></script>
 </body>
 </html>

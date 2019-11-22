@@ -32,17 +32,17 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 6|	circle|	x, y, d | Intet|	tegn en cirkel ved x, y med diameter d
 7|	line|	x1, y1, x2, y2 | Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
 8|	text| string, x, y| Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
-8|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
-9|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
-10| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
-11|  mouseIsPressed| Intet| if(mouseIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver klikket med musen lige nu
-12|  mouseX| Intet| tape[i]=mouseX| sætter den aktuelle celle til musens x værdi
-13| mouseY| Intet| tape[i]=mouseY| sætter den aktuelle celle til musens y værdi
-14| *| a, b| stack: a*b| Når dette er evalueret vil dette fungere som et argument
-15| / | a, b| stack: a/b| Når dette er evalueret vil dette fungere som et argument
-16| +| a, b| stack: a+b| Når dette er evalueret vil dette fungere som et argument
-17| -| a, b| stack: a-b| Når dette er evalueret vil dette fungere som et argument
-18|	give string as arg|	char until 0 | if(char!==0){string+=char}else{stack: string}|	Den tager en char der pushes som argument indtil char er lig 0 (som er et lidt meningsløst ascii-symbol)
+9|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
+10|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
+11| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
+12|  mouseIsPressed| Intet| if(mouseIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver klikket med musen lige nu
+13|  mouseX| Intet| tape[i]=mouseX| sætter den aktuelle celle til musens x værdi
+14| mouseY| Intet| tape[i]=mouseY| sætter den aktuelle celle til musens y værdi
+15| *| a, b| stack: a*b| Når dette er evalueret vil dette fungere som et argument
+16| / | a, b| stack: a/b| Når dette er evalueret vil dette fungere som et argument
+17| +| a, b| stack: a+b| Når dette er evalueret vil dette fungere som et argument
+18| -| a, b| stack: a-b| Når dette er evalueret vil dette fungere som et argument
+19|	give string as arg|	ascii-value of char until char equals 0 | if(char!==0){string+=char}else{stack: string}|	Den tager en char der pushes som argument indtil char er lig 0 (som er et lidt meningsløst ascii-symbol)
 
 Her er nogle af de vigtige værdier for keyCode:
 <table>

@@ -45,6 +45,7 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 19|	give string as arg|	ascii-value of char until char equals 0 | if(char!==0){string+=char}else{stack: string}|	Den tager en char der pushes som argument indtil char er lig 0 (som er et lidt meningsløst ascii-symbol)
 
 Her er nogle af de vigtige værdier for keyCode:
+For en fuld liste af alle keyCode værdier [kan findes her](http://keycode.info/)
 <table>
       <thead>
         <tr>

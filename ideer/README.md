@@ -31,6 +31,7 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 5|	rect|	x, y, w, h | Intet|	tegn et rektangel ved x, y som er w bredt og h højt
 6|	circle|	x, y, d | Intet|	tegn en cirkel ved x, y med diameter d
 7|	line|	x1, y1, x2, y2 | Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
+8|	text| string, x, y| Intet|	tegn en linje mellem punktet x1, y1 og x2, y2
 8|  keyIsPressed| Intet| if(keyIsPressed){tape[i]=1}else{tape[i]=0} | om der bliver trykket på en tast lige nu
 9|  key| Intet| tape[i]=key| sætter den aktuelle celle til værdien af den sidste tast, der blev trykket på (kun ascii-værdierne)
 10| keyCode| Intet| tape[i]=keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
@@ -41,7 +42,7 @@ Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 15| / | a, b| stack: a/b| Når dette er evalueret vil dette fungere som et argument
 16| +| a, b| stack: a+b| Når dette er evalueret vil dette fungere som et argument
 17| -| a, b| stack: a-b| Når dette er evalueret vil dette fungere som et argument
-
+18|	give string as arg|	char until 0 | if(char!==0){string+=char}else{stack: string}|	Den tager en char der pushes som argument indtil char er lig 0 (som er et lidt meningsløst ascii-symbol)
 
 Her er nogle af de vigtige værdier for keyCode:
 <table>

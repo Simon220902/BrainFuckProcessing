@@ -62,7 +62,7 @@ let operations = {0: new Operation(resizeCanvas, 2, false),
 				  16: new Operation((a, b)=>a/b, 2, true),
 				  17: new Operation((a, b)=>a+b, 2, true),
 				  18: new Operation((a, b)=>a-b, 2, true),
-				  19: new TempStringOperation()}//something with the tempstring, true)}		
+				  19: new TempStringOperation()}	
 
 class Stack{
 	constructor(){

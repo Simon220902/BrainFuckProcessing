@@ -7,9 +7,22 @@ class Interpreter{
 		this.programIndex = 0;
 		this.loopStart = [];
 		this.output = "";
-		this.done = false;
+		this.is_stepping = false;
+	}
+	reset(){
+		this.tape = new Uint8Array(30000);
+		this.tapeIndex = 0;
+		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
+		this.program = program.replace(/[^\.\,\[\]\<\>\+\-]/gi,"");
+		this.programIndex = 0;
+		this.loopStart = [];
+		this.output = "";
+		this.is_stepping = false;
 	}
 	eval(){
+		if (this.is_stepping){
+			this.reset();
+		}
 		for(;this.programIndex < this.program.length; this.programIndex++){
 			let char = this.program[this.programIndex];
 			//console.log(char);
@@ -40,6 +53,48 @@ class Interpreter{
 					break;
 				default:
 			  }
+		}
+	}
+	step(){
+		if (!this.is_stepping){
+			this.reset();
+			this.is_stepping=true;
+		}
+		else if(this.programIndex < this.program.length){
+		
+		let char = this.program[this.programIndex];
+		//console.log(char);
+		switch(char) {
+			case "<":
+				this.left();
+				break;
+			case ">":
+				this.right();
+				break;
+			case "+":
+				this.plus();
+				break;
+			case "-":
+				this.minus();
+				break;
+			case ".":
+				this.printChar();
+				break;
+			case ",":
+				this.getChar();
+				break;
+			case "[":
+				this.loopOpening();
+				break;
+			case "]":
+				this.loopClosing();
+				break;
+			default:
+		}
+		this.programIndex += 1;
+		}
+		else{
+			this.done = true;
 		}
 	}
 	left() {

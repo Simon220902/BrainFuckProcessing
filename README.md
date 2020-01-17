@@ -2,7 +2,6 @@ Brainfuck med p5.js
 =======
 Et link til projektet indtil videre: [kan findes her](https://simon220902.github.io/BrainFuckProcessing/)
 
-
 ## Ideén  
 
 Bestanddele  
@@ -13,13 +12,20 @@ Bestanddele
   * Selve evaluerings mekanismen  
   * De individuelle opcodes  
 
+# Kort sagt:
+En måde at kunne lave programmer med et grafisk element i [BrainFuck](https://da.wikipedia.org/wiki/Brainfuck).
+
+# Lidt mere kompliceret:
+Projektet består af en BrainFuck fortolker skrevet i JavaScript. Måden det grafiske etableres er ved at der findes en stack af operationer, der afvikles som de skubbes på. Det der skubbes på stacken er værdien fra tabellen af tal (med en række), der svarer til funktioner i P5 (opcodes) eller argumenter. Det traditionelle BrainFuck operator sæt (der kun består af otte symboler) er udvidet med **:** og **;**, som henholdsvis betyder pushOPCODE og pushARG. En liste over opcodesne kan ses længere nede.
+
+# Med rigtig mange detaljer
 En brainfuck intrepreter lavet i p5 med gode visualiseringer og stepthrough muligheder af eksikveringen af brainfuck koden. Det ville gøre jeg kunne hoste det som en github.io side og det ville være nemmere at have et rent tekst input felt med koden. Derudover kunne man også give den nødvendige forklaring i noget ovenstående html osv.
 
 Derudover skal der være et brainfuck interface til p5s tegne funktioner.  
 Det skal ske gennem et stack, hvor man lægger en funktion på (i form af en opcode), der eksikveres når det rette antal argumenter er givet.  
 Der vil være to forskellige operationer for at skubbe en opcode og et argument, da man også skal kunne bruge evaluerede opcodes til argument.
 
-Jeg udvider derfor brainfucks operationssæt med tre symboler nemlig **:**, **;** og **?** hvor den første er pushOPCODE og den anden er pushARG, den tredje er til at poppe fra stacken til den nuværende celle.
+Jeg udvider derfor brainfucks operationssæt med tre symboler nemlig **:** og **;** hvor den første er pushOPCODE og den anden er pushARG.
 
 Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
 

@@ -9,10 +9,14 @@
 </head>
 <body>
 		<script>
+			let mainInterval;
 			let program;
 			let interp;
 			let examplePrograms;
 			let doing_step_through = false;
+			let speed = 10;
+			let pause = true;
+			
 			//Man kan først få adgang til elementerne efter at de er etableret i DOM'en
 			window.onload = function () {
 				examplePrograms = document.getElementById("examples");
@@ -20,6 +24,7 @@
 				document.getElementById("code").value = program;
 				interp = new Interpreter(program);
 			};
+
 			//Denne kører koden der står i kode vinduet på "en gang" og propper resultatet i output paragraph
 			function run() {
 					program = document.getElementById("code").value;
@@ -28,27 +33,73 @@
 					document.getElementById("output").innerHTML = interp.output;
 					updateTape();
 			}
+
+			function pauseProgram(){
+				pause = not(pause);
+				//Vi skal sørge for at stoppe 
+				clearInterval();
+			}
+
+			function highlight() {
+				var inputText = document.getElementById("code_text");
+				var innerHTML = inputText.innerHTML;
+				innerHTML = innerHTML.replace("<mark>","");
+				innerHTML = innerHTML.replace("</mark>","");
+				//Vi skal lige sørge for at den ikke f@cker op på Brainfucks < og >, fordi de bliver lavet om til nedenstående streng når det laves om til tekst for at kunne kende forskel på tags og tekst, men vi skal lige rette op på det igen.
+				innerHTML = innerHTML.replace("&gt;", ">");
+				innerHTML = innerHTML.replace("&lt;", "<");
+				var index = interp.programIndex;
+				if (index >= 0) { 
+					innerHTML = innerHTML.substring(0,index-1) + "<mark>" + innerHTML.substring(index-1,index) + "</mark>" + innerHTML.substring(index);
+					inputText.innerHTML = innerHTML;
+				}
+			}
 			//Stepthrough funktionen
 			function stepThrough(){
 				if (doing_step_through){
 					interp.step();
 					document.getElementById("output").innerHTML = interp.output;
 					updateTape();
-				}else{
+					highlight();
+					//Vi tjekker om programmet er færdigt så det ikke bliver ved med at køre og så stopper vi det, hvis det var igang med autostepthrough
+					if(interp.done){
+						doing_step_through = false;
+						if (not(pause)){
+							pause();
+						}
+						interp.done = false;
+					}
+				}
+				else{
 					program = document.getElementById("code").value;
 					interp = new Interpreter(program);
 					interp.step();
 					document.getElementById("output").innerHTML = interp.output;
 					updateTape();
 					doing_step_through = true;
+					document.getElementById("code_text").innerHTML = program;
+					highlight();
 				}
 			}
+
+			function autoStepthrough(){
+				//Tids intervallet skal afgøre 
+				mainInterval = setInterval(stepThrough, 100);
+				//Så længde den ikke er færdig med at køre...
+				//Så skal den afvikle et symbol, update det hele osv.
+
+			}
+
 			//Hvis der vælges et andet eksempel program, så skifter vi koden i kode vinduet
 			function changeProgram(){
 				program = examplePrograms.options[examplePrograms.selectedIndex].value;
-				console.log(program);
 				document.getElementById("code").value = program;
 				doing_step_through = false;
+			}
+
+			function changeSpeed(){
+				speed = document.getElementById("speed_slider").value;
+				document.getElementById("speed_display").innerHTML = speed;
 			}
 
 			function updateTape(){
@@ -92,9 +143,11 @@
 		</table>
 	</div>
 	<h3>Code</h3>
-	<textarea id="code" cols=100 rows=20></textarea> 
+	<textarea id="code" cols=100 rows=20></textarea>
+	<p id="code_text"></p>
 	<button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>
 	<button class="btn btn-primary" style="background-color:#1c6643;" onclick="stepThrough()">Step</button>
+	<button class="btn btn-primary" style="background-color:#1c6643;" onclick="pauseProgram()">Pause</button>
 	<select id="examples" onchange="changeProgram()">
 		<option value="++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++." selected="selected">Hello world</option>
 		<option value=">+++++++++[<+++++++++++>-]<[>[-]>[-]<<[>+>+<<-]>>[<<+>>-]>>> [-]<<<+++++++++<[>>>+<<[>+>[-]<<-]>[<+>-]>[<<++++++++++>>>+< -]<<-<-]+++++++++>[<->-]>>+>[<[-]<<+>>>-]>[-]+<<[>+>-<<-]<<< [>>+>+<<<-]>>>[<<<+>>>-]>[<+>-]<<-[>[-]<[-]]>>+<[>[-]<-]<+++ +++++[<++++++<++++++>>-]>>>[>+>+<<-]>>[<<+>>-]<[<<<<<.>>>>>- ]<<<<<<.>>[-]>[-]++++[<++++++++>-]<.>++++[<++++++++>-]<++.>+ ++++[<+++++++++>-]<.><+++++..--------.-------.>>[>>+>+<<<-]> >>[<<<+>>>-]<[<<<<++++++++++++++.>>>>-]<<<<[-]>++++[<+++++++ +>-]<.>+++++++++[<+++++++++>-]<--.---------.>+++++++[<------ ---->-]<.>++++++[<+++++++++++>-]<.+++..+++++++++++++.>++++++ ++[<---------->-]<--.>+++++++++[<+++++++++>-]<--.-.>++++++++ [<---------->-]<++.>++++++++[<++++++++++>-]<++++.----------- -.---.>+++++++[<---------->-]<+.>++++++++[<+++++++++++>-]<-. >++[<----------->-]<.+++++++++++..>+++++++++[<---------->-]< -----.---.>>>[>+>+<<-]>>[<<+>>-]<[<<<<<.>>>>>-]<<<<<<.>>>+++ +[<++++++>-]<--.>++++[<++++++++>-]<++.>+++++[<+++++++++>-]<. ><+++++..--------.-------.>>[>>+>+<<<-]>>>[<<<+>>>-]<[<<<<++ ++++++++++++.>>>>-]<<<<[-]>++++[<++++++++>-]<.>+++++++++[<++ +++++++>-]<--.---------.>+++++++[<---------->-]<.>++++++[<++ +++++++++>-]<.+++..+++++++++++++.>++++++++++[<---------->-]< -.---.>+++++++[<++++++++++>-]<++++.+++++++++++++.++++++++++. ------.>+++++++[<---------->-]<+.>++++++++[<++++++++++>-]<-. -.---------.>+++++++[<---------->-]<+.>+++++++[<++++++++++>- ]<--.+++++++++++.++++++++.---------.>++++++++[<---------->-] <++.>+++++[<+++++++++++++>-]<.+++++++++++++.----------.>++++ +++[<---------->-]<++.>++++++++[<++++++++++>-]<.>+++[<-----> -]<.>+++[<++++++>-]<..>+++++++++[<--------->-]<--.>+++++++[< ++++++++++>-]<+++.+++++++++++.>++++++++[<----------->-]<++++ .>+++++[<+++++++++++++>-]<.>+++[<++++++>-]<-.---.++++++.---- ---.----------.>++++++++[<----------->-]<+.---.[-]<<<->[-]>[ -]<<[>+>+<<-]>>[<<+>>-]>>>[-]<<<+++++++++<[>>>+<<[>+>[-]<<-] >[<+>-]>[<<++++++++++>>>+<-]<<-<-]+++++++++>[<->-]>>+>[<[-]< <+>>>-]>[-]+<<[>+>-<<-]<<<[>>+>+<<<-]>>>[<<<+>>>-]<>>[<+>-]< <-[>[-]<[-]]>>+<[>[-]<-]<++++++++[<++++++<++++++>>-]>>>[>+>+ <<-]>>[<<+>>-]<[<<<<<.>>>>>-]<<<<<<.>>[-]>[-]++++[<++++++++> -]<.>++++[<++++++++>-]<++.>+++++[<+++++++++>-]<.><+++++..--- -----.-------.>>[>>+>+<<<-]>>>[<<<+>>>-]<[<<<<++++++++++++++ .>>>>-]<<<<[-]>++++[<++++++++>-]<.>+++++++++[<+++++++++>-]<- -.---------.>+++++++[<---------->-]<.>++++++[<+++++++++++>-] <.+++..+++++++++++++.>++++++++[<---------->-]<--.>+++++++++[ <+++++++++>-]<--.-.>++++++++[<---------->-]<++.>++++++++[<++ ++++++++>-]<++++.------------.---.>+++++++[<---------->-]<+. >++++++++[<+++++++++++>-]<-.>++[<----------->-]<.+++++++++++ ..>+++++++++[<---------->-]<-----.---.+++.---.[-]<<<]">Bottles</option>
@@ -104,10 +157,12 @@
 				   [>.+<-]">Alphabet</option>
 		<option value="">Pong</option>
 	</select>
+	<input type="range" min="1" max="100" value="50" class="slider" id="speed_slider" onchange="changeSpeed()">
 	<h3>Output</h3>
 	<p style="height: 100;" id="output"></p>
-	<h1>A quick guide</h1>
-	<p></p>
+	<h1>SPEED</h1>
+	<p id="speed_display"></p>
 	<script type="text/javascript" src="sketch.js"></script>
+	<h1>A quick guide</h1>
 </body>
 </html>

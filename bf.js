@@ -1,13 +1,16 @@
-class Interpreter{
+ class Interpreter{
 	constructor(program){
 		this.tape = new Uint8Array(30000);
 		this.tapeIndex = 0;
 		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
-		this.program = program.replace(/[^\.\,\[\]\<\>\+\-]/gi,"");
+		//this.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;]/gi,"");
+		//Ja for at kunne have det kørte symbol highlighted bruger vi ikke ovenstående.
+		this.program = program;
 		this.programIndex = 0;
 		this.loopStart = [];
 		this.output = "";
 		this.is_stepping = false;
+		this.done = false;
 	}
 	reset(){
 		this.tape = new Uint8Array(30000);
@@ -153,6 +156,7 @@ class InterpreterWithStack extends Interpreter{
 		super.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;\?]/gi,"");
 		this.stack = new Stack();
 	}
+	//Det giver nok ikke så meget mening at have en eval, da man bliver nødt til at køre det i steps
 	eval(){
 		for(;this.programIndex < this.program.length; this.programIndex++){
 			let char = this.program[this.programIndex];

@@ -33,5 +33,5 @@ function draw() {
     fill(0);
   }
   text(mouseY, 10, 30);
-  circle(x, y, 25);
+  circle(x, y, 50);
 }

@@ -1,4 +1,6 @@
- class Interpreter{
+//import * as s from "/stack.js";
+
+class Interpreter{
 	constructor(program){
 		this.tape = new Uint8Array(30000);
 		this.tapeIndex = 0;
@@ -63,41 +65,42 @@
 			this.reset();
 			this.is_stepping=true;
 		}
-		else if(this.programIndex < this.program.length){
-		
-		let char = this.program[this.programIndex];
-		//console.log(char);
-		switch(char) {
-			case "<":
-				this.left();
-				break;
-			case ">":
-				this.right();
-				break;
-			case "+":
-				this.plus();
-				break;
-			case "-":
-				this.minus();
-				break;
-			case ".":
-				this.printChar();
-				break;
-			case ",":
-				this.getChar();
-				break;
-			case "[":
-				this.loopOpening();
-				break;
-			case "]":
-				this.loopClosing();
-				break;
-			default:
-		}
-		this.programIndex += 1;
+		else if(this.programIndex< this.program.length){
+			
+			let char = this.program[this.programIndex];
+			//console.log(char);
+			switch(char) {
+				case "<":
+					this.left();
+					break;
+				case ">":
+					this.right();
+					break;
+				case "+":
+					this.plus();
+					break;
+				case "-":
+					this.minus();
+					break;
+				case ".":
+					this.printChar();
+					break;
+				case ",":
+					this.getChar();
+					break;
+				case "[":
+					this.loopOpening();
+					break;
+				case "]":
+					this.loopClosing();
+					break;
+				default:
+			}
+			this.programIndex += 1;
 		}
 		else{
 			this.done = true;
+			this.is_stepping = false;
 		}
 	}
 	left() {
@@ -113,7 +116,7 @@
 		this.tape[this.tapeIndex]--;
 	}
 	printChar(){
-		console.log(String.fromCharCode(this.tape[this.tapeIndex]));
+		//console.log(String.fromCharCode(this.tape[this.tapeIndex]));
 		this.output += String.fromCharCode(this.tape[this.tapeIndex]);
 	}
 	getChar(){
@@ -149,18 +152,20 @@
 	}
 }
 
-
 class InterpreterWithStack extends Interpreter{
 	constructor(program){
 		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
-		super.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;\?]/gi,"");
-		this.stack = new Stack();
+		//super.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;\?]/gi,"");
+		super(program);
+		//console.log(this);
+		//Vi giver stacken objektet selv så den kan proppe ting på tapen
+		this.stack = null;
 	}
 	//Det giver nok ikke så meget mening at have en eval, da man bliver nødt til at køre det i steps
 	eval(){
 		for(;this.programIndex < this.program.length; this.programIndex++){
 			let char = this.program[this.programIndex];
-			//console.log(char);
+			console.log(char);
 			switch(char) {
 				case "<":
 					super.left();
@@ -187,24 +192,68 @@ class InterpreterWithStack extends Interpreter{
 					super.loopClosing();
 					break;
 				case ":":
-					this.pushOPC();
+					this.pushOPC(this.tape[this.tapeIndex]);
 					break;
 				case ";":
-					this.pushARG();
+					this.pushARG(this.tape[this.tapeIndex]);
 					break;
-				case "?":
-					this.popARG();
-				default:
 			  }
 		}
 	}
+	step(){
+		if (!this.is_stepping){
+			this.reset();
+			this.is_stepping=true;
+		}
+		else if(this.programIndex< this.program.length){
+			
+			let char = this.program[this.programIndex];
+			//console.log(char);
+			switch(char) {
+				case "<":
+					this.left();
+					break;
+				case ">":
+					this.right();
+					break;
+				case "+":
+					this.plus();
+					break;
+				case "-":
+					this.minus();
+					break;
+				case ".":
+					this.printChar();
+					break;
+				case ",":
+					this.getChar();
+					break;
+				case "[":
+					this.loopOpening();
+					break;
+				case "]":
+					this.loopClosing();
+					break;
+				case ":":
+					this.pushOPC(this.tape[this.tapeIndex]);
+					break;
+				case ";":
+					this.pushARG(this.tape[this.tapeIndex]);
+					break;
+				default:
+			}
+			this.programIndex += 1;
+		}
+		else{
+			this.done = true;
+			this.is_stepping = false;
+		}
+	}
 	pushOPC(){
-		this.stack.pushOpc(this.tape[this.tapeIndex]);
+		this.stack.pushOPC(this.tape[this.tapeIndex]);
 	}
 	pushARG(){
-		this.stack.pushArg(this.tape[this.tapeIndex]);
+		this.stack.pushARG(this.tape[this.tapeIndex]);
 	}
-	popARG(){
-		this.tape[this.tapeIndex] = this.stack.popArg();
-	}
+
 }

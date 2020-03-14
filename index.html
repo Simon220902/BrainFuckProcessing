@@ -16,19 +16,137 @@
 			let examplePrograms;
 			let doing_step_through = false;
 			let pause = true;
+			//Vi laver p5 instansen  
+			let sketch = function(p) {
+				p.setup = function(){
+				p.createCanvas(255, 255);
+				p.fill(255);
+				p.background(0);}}
+			let p = new p5(sketch, window.document.getElementById('drawing_window'));
+
+			class Stack{
+				constructor(interpreter){
+					this.stack = [];
+					this.args = [];
+					this.interpreter = interpreter;
+				}
+				pushOPC(OPC){
+					this.stack.push(OPC);
+					//Dette er dem som ikke skal bruge nogle argumenter
+					switch (OPC){
+						case 8:
+							this.interpreter.tape[this.interpreter.tapeIndex] = p.keyIsPressed;
+							this.stack.pop();
+							break;
+						case 9:
+							this.interpreter.tape[this.interpreter.tapeIndex] = parseInt(p.key);
+							this.stack.pop();
+							break;
+						case 10:
+							this.interpreter.tape[this.interpreter.tapeIndex] = p.keyCode;
+							this.stack.pop();
+							break;
+						case 11:
+							this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseIsPressed;
+							this.stack.pop();
+							break;
+						case 12:
+							this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseX;
+							this.stack.pop();
+							break;
+						case 13:
+							this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseY;
+							this.stack.pop();
+							break;
+					}
+				}
+
+				pushARG(ARG){
+					let opc = this.stack[this.stack.length-1];
+					this.args.push(ARG);
+					switch (opc){
+						case 0:
+							if(this.args.length==2){
+								p.resizeCanvas(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 1:
+							if(this.args.length==1){
+								p.fill(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 2:
+							if(this.args.length==3){
+								p.fill(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 3:
+							if(this.args.length==1){
+								p.background(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 4:
+							if(this.args.length==3){
+								p.background(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 5:
+							if(this.args.length==4){
+								p.rect(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 6:
+							if(this.args.length==3){
+								p.circle(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+						case 7:
+							if(this.args.length==4){
+								p.line(...this.args);
+								this.args = [];
+								this.stack.pop();
+								break;
+							}
+							else{break}
+					}
+				}
+			}
 			
 			//Man kan først få adgang til elementerne efter at de er etableret i DOM'en
 			window.onload = function () {
 				examplePrograms = document.getElementById("examples");
 				program = examplePrograms.options[examplePrograms.selectedIndex].value;
 				document.getElementById("code").value = program;
-				interp = new Interpreter(program);
+				interp = new InterpreterWithStack(program);
+				interp.stack = new Stack(interp);
 			};
 
 			//Denne kører koden der står i kode vinduet på "en gang" og propper resultatet i output paragraph
 			function run() {
 					program = document.getElementById("code").value;
-					interp = new Interpreter(program);
+					interp = new InterpreterWithStack(program);
+					interp.stack = new Stack(interp);
 					interp.eval();
 					document.getElementById("output").innerHTML = interp.output;
 					updateTape();
@@ -42,7 +160,7 @@
 
 			function highlight() {
 				let index = interp.programIndex;
-				innerHTML = program.substring(0,index-1) + "<mark>" + program.substring(index-1,index) + "</mark>" + program.substring(index);
+				innerHTML = program.substring(0,index-1) + "<mark style='font-size:25px'>" + program.substring(index-1,index) + "</mark>" + program.substring(index);
 				document.getElementById("code_text").innerHTML = innerHTML;
             }
             
@@ -150,12 +268,16 @@
 				   [>.+<-]">Alphabet</option>
 		<option value="">Pong</option>
 	</select>
-	<input type="range" min="1" max="100" value="50" class="slider" id="speed_slider" onchange="changeSpeed()">
+	<input type="range" min="1" max="1000" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
     <p id="speed_display"></p>
     <h3>Output</h3>
 	<p style="height: 100;" id="output"></p>
-	
-	<script type="text/javascript" src="sketch.js"></script>
+	<div id='drawing_window'></div>
 	<h1>A quick guide</h1>
+	<button onclick="operations[6].func(...[50,50,50])">cirkel</button>
+	<button onclick="operations[5].func(...[50,50,50,50])">FIRKANt</button>
+	<button onclick="console.log(operations[7].func)">Linje</button>
+	<button onclick="p.circle(...[50,50,50]);">vis</button>
+
 </body>
 </html>

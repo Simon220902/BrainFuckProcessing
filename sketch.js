@@ -18,7 +18,7 @@ function setup() {
 }
 
 function draw() {
-  if (mouseX <= width && mouseX >= 0){
+/*  if (mouseX <= width && mouseX >= 0){
     x = mouseX;
   }
   if(mouseY <= height && mouseY >= 0){
@@ -33,5 +33,5 @@ function draw() {
     fill(0);
   }
   text(mouseY, 10, 30);
-  circle(x, y, 50);
+  circle(x, y, 50);*/
 }

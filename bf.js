@@ -60,7 +60,7 @@ class Interpreter{
 			  }
 		}
 	}
-	step(){
+/*	step(){
 		if (!this.is_stepping){
 			this.reset();
 			this.is_stepping=true;
@@ -102,7 +102,7 @@ class Interpreter{
 			this.done = true;
 			this.is_stepping = false;
 		}
-	}
+	}*/
 	left() {
 		this.tapeIndex--;
 	}

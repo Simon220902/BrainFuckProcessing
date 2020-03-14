@@ -20,8 +20,9 @@
 			let sketch = function(p) {
 				p.setup = function(){
 				p.createCanvas(255, 255);
-				p.fill(255);
-				p.background(0);}}
+				p.background(0);
+				p.fill(255,0,0);
+			}}
 			let p = new p5(sketch, window.document.getElementById('drawing_window'));
 
 			class Stack{
@@ -64,6 +65,7 @@
 				pushARG(ARG){
 					let opc = this.stack[this.stack.length-1];
 					this.args.push(ARG);
+					
 					switch (opc){
 						case 0:
 							if(this.args.length==2){
@@ -80,8 +82,9 @@
 								this.stack.pop();
 								break;
 							}
-							else{break}
+							else{break;}
 						case 2:
+							console.log("a");
 							if(this.args.length==3){
 								p.fill(...this.args);
 								this.args = [];
@@ -122,8 +125,10 @@
 							}
 							else{break}
 						case 7:
-							if(this.args.length==4){
-								p.line(...this.args);
+							console.log("a");
+							if(this.args.length==6){
+								console.log("b");
+								p.triangle(...this.args);
 								this.args = [];
 								this.stack.pop();
 								break;
@@ -147,6 +152,9 @@
 					program = document.getElementById("code").value;
 					interp = new InterpreterWithStack(program);
 					interp.stack = new Stack(interp);
+					p.resizeCanvas(255,255);
+					p.background(0);
+					p.fill(255);
 					interp.eval();
 					document.getElementById("output").innerHTML = interp.output;
 					updateTape();
@@ -180,7 +188,11 @@
 				}
 				else{
 					program = document.getElementById("code").value;
-					interp = new Interpreter(program);
+					interp = new InterpreterWithStack(program);
+					interp.stack = new Stack(interp);
+					p.resizeCanvas(255,255);
+					p.background(0);
+					p.fill(255);
 					interp.step();
 					document.getElementById("output").innerHTML = interp.output;
 					updateTape();
@@ -271,13 +283,7 @@
 	<input type="range" min="1" max="1000" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
     <p id="speed_display"></p>
     <h3>Output</h3>
-	<p style="height: 100;" id="output"></p>
+	<p id="output"></p>
 	<div id='drawing_window'></div>
-	<h1>A quick guide</h1>
-	<button onclick="operations[6].func(...[50,50,50])">cirkel</button>
-	<button onclick="operations[5].func(...[50,50,50,50])">FIRKANt</button>
-	<button onclick="console.log(operations[7].func)">Linje</button>
-	<button onclick="p.circle(...[50,50,50]);">vis</button>
-
 </body>
 </html>

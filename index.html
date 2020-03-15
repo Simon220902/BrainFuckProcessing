@@ -160,6 +160,25 @@
 					updateTape();
 			}
 
+			function updateTape(){
+				if (interp.tapeIndex >= 9){
+					for (let i = 0; i < 10; i++){
+						let cell = document.getElementById("t"+i.toString())
+						cell.innerHTML = interp.tape[interp.tapeIndex+i-5];
+						cell.style.backgroundColor = "#bbb4b4";
+					}
+					document.getElementById("t5").style.background="red";
+				}
+				else{
+					for (let i = 0; i < 10; i++){
+						let cell = document.getElementById("t"+i.toString())
+						cell.innerHTML = interp.tape[i];
+						cell.style.backgroundColor = "#bbb4b4";
+					}
+					document.getElementById("t"+interp.tapeIndex.toString()).style.backgroundColor="red";
+				}
+			}
+
 			function pauseProgram(){
 				//Vi skal sørge for at stoppe 
                 clearInterval(mainInterval);
@@ -222,25 +241,6 @@
 			function changeSpeed(){
 				intervalSpeed = document.getElementById("speed_slider").value;
 				document.getElementById("speed_display").innerHTML = intervalSpeed;
-			}
-
-			function updateTape(){
-				if (interp.tapeIndex >= 9){
-					for (let i = 0; i < 10; i++){
-						let cell = document.getElementById("t"+i.toString())
-						cell.innerHTML = interp.tape[interp.tapeIndex+i-5];
-						cell.style.backgroundColor = "#bbb4b4";
-					}
-					document.getElementById("t5").style.background="red";
-				}
-				else{
-					for (let i = 0; i < 10; i++){
-						let cell = document.getElementById("t"+i.toString())
-						cell.innerHTML = interp.tape[i];
-						cell.style.backgroundColor = "#bbb4b4";
-					}
-					document.getElementById("t"+interp.tapeIndex.toString()).style.backgroundColor="red";
-				}
 			}
 		</script>
 

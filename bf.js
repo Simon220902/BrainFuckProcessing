@@ -4,9 +4,6 @@ class Interpreter{
 	constructor(program){
 		this.tape = new Uint8Array(30000);
 		this.tapeIndex = 0;
-		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
-		//this.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;]/gi,"");
-		//Ja for at kunne have det kørte symbol highlighted bruger vi ikke ovenstående.
 		this.program = program;
 		this.programIndex = 0;
 		this.loopStart = [];
@@ -17,8 +14,6 @@ class Interpreter{
 	reset(){
 		this.tape = new Uint8Array(30000);
 		this.tapeIndex = 0;
-		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
-		this.program = program.replace(/[^\.\,\[\]\<\>\+\-]/gi,"");
 		this.programIndex = 0;
 		this.loopStart = [];
 		this.output = "";
@@ -30,7 +25,6 @@ class Interpreter{
 		}
 		for(;this.programIndex < this.program.length; this.programIndex++){
 			let char = this.program[this.programIndex];
-			//console.log(char);
 			switch(char) {
 				case "<":
 					this.left();
@@ -60,7 +54,7 @@ class Interpreter{
 			  }
 		}
 	}
-/*	step(){
+	step(){
 		if (!this.is_stepping){
 			this.reset();
 			this.is_stepping=true;
@@ -68,7 +62,6 @@ class Interpreter{
 		else if(this.programIndex< this.program.length){
 			
 			let char = this.program[this.programIndex];
-			//console.log(char);
 			switch(char) {
 				case "<":
 					this.left();
@@ -102,7 +95,7 @@ class Interpreter{
 			this.done = true;
 			this.is_stepping = false;
 		}
-	}*/
+	}
 	left() {
 		this.tapeIndex--;
 	}
@@ -116,7 +109,6 @@ class Interpreter{
 		this.tape[this.tapeIndex]--;
 	}
 	printChar(){
-		//console.log(String.fromCharCode(this.tape[this.tapeIndex]));
 		this.output += String.fromCharCode(this.tape[this.tapeIndex]);
 	}
 	getChar(){
@@ -154,10 +146,7 @@ class Interpreter{
 
 class InterpreterWithStack extends Interpreter{
 	constructor(program){
-		//En regex der fjerner alt undtagen . , [ ] < > + - : ;
-		//super.program = program.replace(/[^\.\,\[\]\<\>\+\-\:\;\?]/gi,"");
 		super(program);
-		//console.log(this);
 		//Vi giver stacken objektet selv så den kan proppe ting på tapen
 		this.stack = null;
 	}
@@ -165,7 +154,6 @@ class InterpreterWithStack extends Interpreter{
 	eval(){
 		for(;this.programIndex < this.program.length; this.programIndex++){
 			let char = this.program[this.programIndex];
-			console.log(char);
 			switch(char) {
 				case "<":
 					super.left();
@@ -197,7 +185,7 @@ class InterpreterWithStack extends Interpreter{
 				case ";":
 					this.pushARG(this.tape[this.tapeIndex]);
 					break;
-			  }
+			}
 		}
 	}
 	step(){
@@ -205,34 +193,33 @@ class InterpreterWithStack extends Interpreter{
 			this.reset();
 			this.is_stepping=true;
 		}
-		else if(this.programIndex< this.program.length){
+		else if(this.programIndex < this.program.length){
 			
 			let char = this.program[this.programIndex];
-			//console.log(char);
 			switch(char) {
 				case "<":
-					this.left();
+					super.left();
 					break;
 				case ">":
-					this.right();
+					super.right();
 					break;
 				case "+":
-					this.plus();
+					super.plus();
 					break;
 				case "-":
-					this.minus();
+					super.minus();
 					break;
 				case ".":
-					this.printChar();
+					super.printChar();
 					break;
 				case ",":
-					this.getChar();
+					super.getChar();
 					break;
 				case "[":
-					this.loopOpening();
+					super.loopOpening();
 					break;
 				case "]":
-					this.loopClosing();
+					super.loopClosing();
 					break;
 				case ":":
 					this.pushOPC(this.tape[this.tapeIndex]);
@@ -240,7 +227,6 @@ class InterpreterWithStack extends Interpreter{
 				case ";":
 					this.pushARG(this.tape[this.tapeIndex]);
 					break;
-				default:
 			}
 			this.programIndex += 1;
 		}
@@ -248,6 +234,7 @@ class InterpreterWithStack extends Interpreter{
 			this.done = true;
 			this.is_stepping = false;
 		}
+
 	}
 	pushOPC(){
 		this.stack.pushOPC(this.tape[this.tapeIndex]);

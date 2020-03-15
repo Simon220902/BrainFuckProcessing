@@ -122,7 +122,6 @@ class Interpreter{
 		if (this.tape[this.tapeIndex] !== 0){
 			this.loopStart.push(this.programIndex);
 		}else{
-			console.log("HEJ");
 			this.programIndex = this.loopEnd(this.programIndex)+1;
 		}
 	}

@@ -28,11 +28,10 @@
 			class Stack{
 				constructor(interpreter){
 					this.stack = [];
-					this.args = [];
 					this.interpreter = interpreter;
 				}
 				pushOPC(OPC){
-					this.stack.push(OPC);
+					this.stack.push([OPC, []]);
 					//Dette er dem som ikke skal bruge nogle argumenter
 					switch (OPC){
 						case 8:
@@ -63,70 +62,63 @@
 				}
 
 				pushARG(ARG){
-					let opc = this.stack[this.stack.length-1];
-					this.args.push(ARG);
+					let opc = this.stack[this.stack.length-1][0];
+					this.stack[this.stack.length-1][1].push(ARG);
+					let opc_args = this.stack[this.stack.length-1][1];
 					
 					switch (opc){
 						case 0:
-							if(this.args.length==2){
-								p.resizeCanvas(...this.args);
-								this.args = [];
+							if(opc_args.length==2){
+								p.resizeCanvas(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break}
 						case 1:
-							if(this.args.length==1){
-								p.fill(...this.args);
-								this.args = [];
+							if(opc_args.length==1){
+								p.fill(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break;}
 						case 2:
-							if(this.args.length==3){
-								p.fill(...this.args);
-								this.args = [];
+							if(opc_args.length==3){
+								p.fill(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break}
 						case 3:
-							if(this.args.length==1){
-								p.background(...this.args);
-								this.args = [];
+							if(opc_args.length==1){
+								p.background(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break}
 						case 4:
-							if(this.args.length==3){
-								p.background(...this.args);
-								this.args = [];
+							if(opc_args.length==3){
+								p.background(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break}
 						case 5:
-							if(this.args.length==4){
-								p.rect(...this.args);
-								this.args = [];
+							if(opc_args.length==4){
+								p.rect(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break}
 						case 6:
-							if(this.args.length==3){
-								p.circle(...this.args);
-								this.args = [];
+							if(opc_args.length==3){
+								p.circle(...opc_args);
 								this.stack.pop();
 								break;
 							}
 							else{break}
 						case 7:
-							if(this.args.length==6){
-								p.triangle(...this.args);
-								this.args = [];
+							if(opc_args.length==6){
+								p.triangle(...opc_args);
 								this.stack.pop();
 								break;
 							}
@@ -264,7 +256,7 @@
 	<h3>Code</h3>
 	<textarea id="code" cols=100 rows=20></textarea>
 	<p id="code_text"></p>
-	<button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>
+	<!--<button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>-->
     <button class="btn btn-primary" style="background-color:#1c6643;" onclick="stepThrough()">Step</button>
     <button class="btn btn-primary" style="background-color:#1c6643;" onclick="autoStepthrough()">AutoStep</button>
 	<button class="btn btn-primary" style="background-color:#1c6643;" onclick="pauseProgram()">Pause</button>
@@ -345,7 +337,7 @@ nu mangler vi bare radius > ;
 og så går vi tilbage til tegn cirkels opcode og gør det samme igen <<<
 ]">Cirkler ved mus</option>
 	</select>
-	<input type="range" min="1" max="1000" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
+	<input type="range" min="0" max="500" step="1" style="width:600px;" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
     <p id="speed_display"></p>
     <h3>Output</h3>
 	<p id="output"></p>

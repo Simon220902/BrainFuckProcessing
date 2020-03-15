@@ -84,7 +84,6 @@
 							}
 							else{break;}
 						case 2:
-							console.log("a");
 							if(this.args.length==3){
 								p.fill(...this.args);
 								this.args = [];
@@ -125,9 +124,7 @@
 							}
 							else{break}
 						case 7:
-							console.log("a");
 							if(this.args.length==6){
-								console.log("b");
 								p.triangle(...this.args);
 								this.args = [];
 								this.stack.pop();
@@ -148,7 +145,7 @@
 			};
 
 			//Denne kører koden der står i kode vinduet på "en gang" og propper resultatet i output paragraph
-			function run() {
+			function run(){
 					program = document.getElementById("code").value;
 					interp = new InterpreterWithStack(program);
 					interp.stack = new Stack(interp);
@@ -185,7 +182,7 @@
                 mainInterval = null;
 			}
 
-			function highlight() {
+			function highlight(){
 				let index = interp.programIndex;
 				innerHTML = program.substring(0,index-1) + "<mark style='font-size:25px'>" + program.substring(index-1,index) + "</mark>" + program.substring(index);
 				document.getElementById("code_text").innerHTML = innerHTML;
@@ -278,7 +275,75 @@
 				A  +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++
 				   <
 				   [>.+<-]">Alphabet</option>
-		<option value="">Pong</option>
+		<option value="Farve setup
+- Vi sætter det første tal på tapen til 255
+> Vi beholde det  tal på tapen til 255
+Nu laver vi så de basale koordinater vi regner med at skærmen er 255x255
+Setup af koordinaterne
+>>>
+>->-
+<<<<
+Nu skal vi så rent faktisk lave værdierne
+Vi skal gentage det 16 gange
+++++++++++++++++
+[>++++>++++++++>----<<<-]
+Nu kan vi så begynde at tegne
+>>>>>
+Så laver vi baggrunden som skal være hvid (OPCODE 3)
++++:
+<<<<<<<;>>>>>>>
+Den første kommando vi gerne vil have er trekanten (altså OPCODE 7)
+Men inden vi kan det skal vi første have farven til at være sort så altså fill (altså OPCODE 1)
+--:<<<<<<;>>>>>>
+Vi ændrer opcoden ++++++:
+Nu skal vi så give den koordinaterne som er ( midt 1/4 fra toppen) (1/4 fra venstre  1/4 fra toppen) (1/4 fra højre  1/4 fra toppen)
+( midt 1/4 fra toppen)
+<<<;<;
+(1/4 fra venstre  midt) 
+;>;
+(1/4 fra højre  midt)
+>;<;
+Den anden kommando vi gerne vil have er firkanten til selve huset (altså OPCODE 5)
+Men inden vi kan det skal vi første have farven til at være rød så altså fill men med rgb (altså OPCODE 2)
+Vi starter med at gå hen til det rigtige sted >>> så får vi to -----: så går vi ned til starten<<<<<<<;>;;>>>>>>
+Vi ændrer opcoden +++:
+Nu skal vi så give den koordinatet  og bredden og højden som er (1/4 fra venstre  midt) Bredde halvdelen Højde 1/4 del
+(1/4 fra venstre  midt)
+<<<<;>;
+Bredde halvdelen af skærmen
+;
+Højde 1/4
+<;
+Den tredje kommando vi gerne vil have er firkanten til døren (altså OPCODE 5)
+Men inden vi kan det skal vi første have farven til at være hvid så altså fill (altså OPCODE 1)
+Vi starter med at gå hen til det rigtige sted >>>> så får vi et ----: så går vi ned til starten<<<<<<<; så går vi tilbage>>>>>>>vi ændrer opcoden til 5 ++++ :
+Nu skal vi så give koordinatet og bredde og højde
+vi skal ændre 1/4 del fra venstre til 3/8 dele fra venstre ved at plusse med 32
+vi går til 1/4 del fra venstre <<<<
+Så laver vi et loop der kører fire gange<++++
+[>++++++++<-]sådan så har vi det>;
+
+så skal vi også bare have midten>;
+Nu har vi koordinaterne
+Nu skal vi så give bredden der skal være 1/8 af skærmen altså 32
+<<<++++
+[>++++++++<-]
+>;
+Nu skal vi så bruge 64
+<++++
+[>++++++++<-]
+>;">Hus</option>
+		<option value="ADVARSEL! Lad vær med at køre dette med run knappen kør det kun med AutoStepThrough ellers crasher det!!!
+Okay så hvad er ideen at lave en cirkel der hvor musen er (cirkel OPCODE I mousex OPCODE I mousey OPCODE I cirkel r) Vi laver cirklens opcode ++++++ Vi laver cirklens radius >>+++++++ [>++++++++++<-] << 
+[
+vi starter med at skubbe tegnCirkel :
+Nu skal vi så få musens X koordinat så vi laver den opcode (altså 12) > [-] ++++ ++++ ++++ :
+Så erstattes værdien og vi skubber den på som argument ;
+Nu skal vi så få musens Y koordinat så vi laver den opcode (altså 13) > [-] ++++ ++++ ++++ + :
+Så erstattes værdien og vi skubber den på som argument ;
+nu mangler vi bare radius > ;
+og så går vi tilbage til tegn cirkels opcode og gør det samme igen <<<
+]">Cirkler ved mus</option>
 	</select>
 	<input type="range" min="1" max="1000" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
     <p id="speed_display"></p>

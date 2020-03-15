@@ -122,6 +122,7 @@ class Interpreter{
 		if (this.tape[this.tapeIndex] !== 0){
 			this.loopStart.push(this.programIndex);
 		}else{
+			console.log("HEJ");
 			this.programIndex = this.loopEnd(this.programIndex)+1;
 		}
 	}
@@ -133,7 +134,7 @@ class Interpreter{
 		}
 	}
 	loopEnd(index){
-		for (let iadd=0;iadd+index<this.program.length;iadd++){
+		for (let iadd=1;iadd+index<this.program.length;iadd++){
 			if (this.program[index+iadd]=="]"){
 				return index+iadd;
 			}else if(this.program[index+iadd]=="["){

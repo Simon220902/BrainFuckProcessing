@@ -19,23 +19,22 @@ En måde at kunne lave programmer med et grafisk element i [BrainFuck](https://d
 Projektet består af en BrainFuck fortolker skrevet i JavaScript. Måden det grafiske etableres er ved at der findes en stack af operationer, der afvikles som de skubbes på. Det der skubbes på stacken er værdien fra tabellen af tal (med en række), der svarer til funktioner i P5 (opcodes) eller argumenter. Det traditionelle BrainFuck operator sæt (der kun består af otte symboler) er udvidet med **:** og **;**, som henholdsvis betyder pushOPCODE og pushARG. En liste over opcodesne kan ses længere nede.
 
 Her er en tabel over mulige opcodes med beskrivelse, argumenter, effekt og returnværdi.  
-
 Opcode	|Funktion	|Argumenter |Returnværdi	|Beskrivelse
 ---|---|---|---|---
-0|	resizeCanvas|	width, height| Intet|	sæt skærm til width, height (Default værdi 255x255)
-1|	fillGrey|	greyscale| Intet|		sæt fill-farven med et argument mellem 0-255
-2|	fill|	r,g,b| Intet|	sæt fill-farven med r,g,b værdier som argumenter
-3|	backgroundGrey|	greyscale | Intet|	sæt baggrundsfarven med et argument mellem 0-255
-4|	background|	r,g,b | Intet|	sæt baggrundsfarven med r,g,b værdier som argumenter
-5|	rect|	x, y, w, h | Intet|	tegn et rektangel ved x, y som er w bredt og h højt
-6|	circle|	x, y, d | Intet|	tegn en cirkel ved x, y med diameter d
-7|	triangle|	x1, y1, x2, y2, x3, y3 | Intet|	tegn en trekant mellem punkterne x1, y1 og x2, y2 og x3, y3
-8|  keyIsPressed| Intet| if(keyIsPressed){stack: 1}else{stack: 0} | om der bliver trykket på en tast lige nu. Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
-9|  key| Intet| stack: key| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken. Hvilkle tast der blev trykket på (kun ascii-værdierne)
-10| keyCode| Intet| stack: keyCode| sætter den aktuelle celle til værdien af den sidste speciel tast, der blev trykket på, værdierne kan ses nedenunder
-11|  mouseIsPressed| Intet| if(mouseIsPressed){stack: 1}else{stack: 0} | om der bliver klikket med musen lige nu. Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
-12|  mouseX| Intet| stack: mouseX| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
-13| mouseY| Intet| stack: mouseY| Når dette er evalueret vil dette kunne fungere som et argument, eller som noget der kan tages fra stacken
+0|	resizeCanvas|	width, height| Intet|	Sæt skærm til width, height (Default værdi 255x255)
+1|	fillGrey|	greyscale| Intet|		Sæt fill-farven med et argument mellem 0-255
+2|	fill|	r,g,b| Intet|	Sæt fill-farven med r,g,b værdier som argumenter
+3|	backgroundGrey|	greyscale | Intet|	Sæt baggrundsfarven med et argument mellem 0-255
+4|	background|	r,g,b | Intet|	Sæt baggrundsfarven med r,g,b værdier som argumenter
+5|	rect|	x, y, w, h | Intet|	Tegn et rektangel ved x, y som er w bredt og h højt
+6|	circle|	x, y, d | Intet|	Tegn en cirkel ved x, y med diameter d
+7|	triangle|	x1, y1, x2, y2, x3, y3 | Intet|	Tegn en trekant mellem punkterne x1, y1 og x2, y2 og x3, y3
+8|  keyIsPressed| Intet| tape[tapeIndex] = keyIsPressed | Om der bliver trykket på en tast lige nu. Når dette er evalueret vil værdien sættes på det nuværende sted på tapen.
+9|  key| Intet| tape[tapeIndex] = key|  Hvilkle tast der blev trykket på (kun ascii-værdierne). Når dette er evalueret vil værdien sættes på det nuværende sted på tapen.
+10| keyCode| Intet| tape[tapeIndex] = keyCode| Værdien af en speciel tast, der blev trykket på, værdierne kan ses nedenunder i tabellen over keyCodes. Når dette er evalueret vil værdien sættes på det nuværende sted på tapen.
+11|  mouseIsPressed| Intet|tape[tapeIndex] = mouseIsPressed | Om der bliver klikket med musen lige nu. Når dette er evalueret vil værdien sættes på det nuværende sted på tapen.
+12|  mouseX| Intet| tape[tapeIndex] = mouseX| Musens X-koordinat. Når dette er evalueret vil værdien sættes på det nuværende sted på tapen.
+13| mouseY| Intet| tape[tapeIndex] = mouseY| Musens Y-koordinat. Når dette er evalueret vil værdien sættes på det nuværende sted på tapen.
 
 Her er nogle af de vigtige værdier for keyCode:
 For en fuld liste af alle keyCode værdier [kan findes her](http://keycode.info/)

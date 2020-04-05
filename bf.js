@@ -59,54 +59,54 @@ class Interpreter{
 					this.loopClosing();
 					break;
 				default:
-			  }
+					}
 		}
 	}
 	step(){
-		//Step funktionen kører kun et enkelt trin, hver gang den bliver kaldt, altså kun et symbol.
-		//Hvis programmet ikke er igang med en trinvis gennemgang, resetter vi interpreteren og sætter den til at være igang
-		if (!this.is_stepping){
-			this.reset();
-			this.is_stepping=true;
+	//Step funktionen kører kun et enkelt trin, hver gang den bliver kaldt, altså kun et symbol.
+	//Hvis programmet ikke er igang med en trinvis gennemgang, resetter vi interpreteren og sætter den til at være igang
+	if (!this.is_stepping){
+		this.reset();
+		this.is_stepping=true;
+	}
+	//Så længe der er program tilovers
+	else if(this.programIndex< this.program.length){
+		//Har vi samme switch case for hver af BF symbolerne
+		switch(this.program[this.programIndex]) {
+			case "<":
+				this.left();
+				break;
+			case ">":
+				this.right();
+				break;
+			case "+":
+				this.plus();
+				break;
+			case "-":
+				this.minus();
+				break;
+			case ".":
+				this.printChar();
+				break;
+			case ",":
+				this.getChar();
+				break;
+			case "[":
+				this.loopOpening();
+				break;
+			case "]":
+				this.loopClosing();
+				break;
+			default:
 		}
-		//Så længe der er program tilovers
-		else if(this.programIndex< this.program.length){
-			//Har vi samme switch case for hver af BF symbolerne
-			switch(this.program[this.programIndex]) {
-				case "<":
-					this.left();
-					break;
-				case ">":
-					this.right();
-					break;
-				case "+":
-					this.plus();
-					break;
-				case "-":
-					this.minus();
-					break;
-				case ".":
-					this.printChar();
-					break;
-				case ",":
-					this.getChar();
-					break;
-				case "[":
-					this.loopOpening();
-					break;
-				case "]":
-					this.loopClosing();
-					break;
-				default:
-			}
-			//Vi tager det næste symbol
-			this.programIndex += 1;
-		}
-		//Hvis der ikke er mere program tilovers er programmet færdigt, vi sætter værdien done til true og sætter til ikke at være igang med en trinvisgennemgang
-		else{
-			this.done = true;
-			this.is_stepping = false;
-		}
+		//Vi tager det næste symbol
+		this.programIndex += 1;
+	}
+	//Hvis der ikke er mere program tilovers er programmet færdigt, vi sætter værdien done til true og sætter til ikke at være igang med en trinvisgennemgang
+	else{
+		this.done = true;
+		this.is_stepping = false;
+	}
 	}
 	//Herunder kommer funktionerne tilknyttet til hver af BF symboler
 	//Tilsvarende BF symbol: <
@@ -145,11 +145,10 @@ class Interpreter{
 	loopOpening(){
 		//Hvis værdien på den nuværende plads på tapen ikke er nul og loopet skal køre
 		if (this.tape[this.tapeIndex] !== 0){
-
 			//Tilføjer vi programindekset til loopStart listen, der virker som en stack, hvor det nyeste loop åbning kommer til at ligge øverst
 			this.loopStart.push(this.programIndex);
 		}else{
-			//Hvis værdien på den nuværende plads på tapen er nul, skal loopet ikke køre, så vi finder, der hvor loopet stopper og sætter det til vores program index
+			//Hvis værdien på den nuværende plads på tapen er nul, skal loopet ikke køre, så vi finder, der hvor loopet stopper og sætter det til vores program index	
 			this.programIndex = this.loopEnd(this.programIndex)+1;
 		}
 	}
@@ -186,7 +185,7 @@ class InterpreterWithStack extends Interpreter{
 		//Da denne klasse er nedarvet af Interpreteren kalder vi interpreteren constructor med programmet
 		super(program);
 		//Den grafiske stack er det der er forskellen på denne underklasse så vi laver en instans af Stack klassen
-		//Vi giver stacken objektet selv så den kan proppe ting på tapen
+		//Vi giver stakken objektet selv så den kan proppe ting på tapen
 		this.stack = new Stack(this);
 	}
 	//Det samme som i Interpreter bare med to nye symboler ":" og ";"
@@ -274,12 +273,12 @@ class InterpreterWithStack extends Interpreter{
 	}
 	//Tilsvarende vores grafiske BF symbol: :
 	pushOPC(){
-		//Vi bruger stackens metode hvor vi skubber værdien på den nuværende plads i tapen
+		//Vi bruger stakkens metode hvor vi skubber værdien på den nuværende plads i tapen
 		this.stack.pushOPC(this.tape[this.tapeIndex]);
 	}
 	//Tilsvarende vores grafiske BF symbol: ;
 	pushARG(){
-		//Vi bruger stackens metode hvor vi skubber værdien på den nuværende plads i tapen
+		//Vi bruger stakkens metode hvor vi skubber værdien på den nuværende plads i tapen
 		this.stack.pushARG(this.tape[this.tapeIndex]);
 	}
 }

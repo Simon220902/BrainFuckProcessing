@@ -8,292 +8,292 @@
 	<script src="bf.js"></script>
 </head>
 <body>
-		<script>
-			//Globale variabler
-            let mainInterval;
-            let intervalSpeed = 100;
-			let program;
-			let interp;
-			let examplePrograms;
-			let doing_step_through = false;
-			let pause = true;
-			//Vi laver p5 instansen  
-			let sketch = function(p) {
-				p.setup = function(){
-				p.createCanvas(255, 255);
-				p.background(0);
-				p.fill(255,0,0);
-			}}
-			let p = new p5(sketch, window.document.getElementById('drawing_window'));
-			//Dette er vores grafisk stack, den skal laves her for at have adgang til p5's funktioner
-			class Stack{
-				constructor(interpreter){
-					//En stack til at holde selve de skubbede opcodes og argumenter
-					this.stack = [];
-					//En instans af interpreteren den selv kører i for at kunne sætte værdier på tapen
-					this.interpreter = interpreter;
-				}
-				pushOPC(OPC){
-					//Det der bliver skubbet på stacken er en liste hvor det første element er opcoden og det andet er en liste af argumenter
-					this.stack.push([OPC, []]);
-					//Vi tjekker om vi kan køre opcoden allerede, da der er nogle opcodes, der ikke bruger nogle argumenter
-					switch (OPC){
-						//OPC: 8 -> keyIsPressed, hvilket bare er keyIsPressed værdien, der sættes på tapen
-						case 8:
-							this.interpreter.tape[this.interpreter.tapeIndex] = p.keyIsPressed;
-							this.stack.pop();
-							break;
-						//OPC: 9 -> key, hvilket bare er key værdien lavet til et integer, der sættes på tapen
-						case 9:
-							this.interpreter.tape[this.interpreter.tapeIndex] = parseInt(p.key);
-							this.stack.pop();
-							break;
-						//OPC: 10 -> keyCode, hvilket bare er keyCode værdien, der sættes på tapen
-						case 10:
-							this.interpreter.tape[this.interpreter.tapeIndex] = p.keyCode;
-							this.stack.pop();
-							break;
-						//OPC: 11 -> mouseIsPressed, hvilket bare er mouseIsPressed værdien, der sættes på tapen
-						case 11:
-							this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseIsPressed;
-							this.stack.pop();
-							break;
-						//OPC: 12 -> mouseX, hvilket bare er mouseX værdien, der sættes på tapen
-						case 12:
-							this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseX;
-							this.stack.pop();
-							break;
-						//OPC: 13 -> mouseY, hvilket bare er mouseY værdien, der sættes på tapen	
-						case 13:
-							this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseY;
-							this.stack.pop();
-							break;
-					}
-				}
+	<script>
+	//Globale variabler
+	let mainInterval;
+	let intervalSpeed = 100;
+	let program;
+	let interp;
+	let examplePrograms;
+	let doing_step_through = false;
+	let pause = true;
+	//Vi laver p5 instansen  
+	let sketch = function(p) {
+	p.setup = function(){
+	p.createCanvas(255, 255);
+	p.background(0);
+	p.fill(255,0,0);
+	}}
+	let p = new p5(sketch, window.document.getElementById('drawing_window'));
+	//Dette er vores grafisk stack, den skal laves her for at have adgang til p5's funktioner
+	class Stack{
+	constructor(interpreter){
+		//En stack til at holde selve de skubbede opcodes og argumenter
+		this.stack = [];
+		//En instans af interpreteren den selv kører i for at kunne sætte værdier på tapen
+		this.interpreter = interpreter;
+	}
+	pushOPC(OPC){
+		//Det der bliver skubbet på stakken er en liste hvor det første element er opcoden og det andet er en liste af argumenter
+		this.stack.push([OPC, []]);
+		//Vi tjekker om vi kan køre opcoden allerede, da der er nogle opcodes, der ikke bruger nogle argumenter
+		switch (OPC){
+		//OPC: 8 -> keyIsPressed, hvilket bare er keyIsPressed værdien, der sættes på tapen
+		case 8:
+			this.interpreter.tape[this.interpreter.tapeIndex] = p.keyIsPressed;
+			this.stack.pop();
+			break;
+		//OPC: 9 -> key, hvilket bare er key værdien lavet til et integer, der sættes på tapen
+		case 9:
+			this.interpreter.tape[this.interpreter.tapeIndex] = parseInt(p.key);
+			this.stack.pop();
+			break;
+		//OPC: 10 -> keyCode, hvilket bare er keyCode værdien, der sættes på tapen
+		case 10:
+			this.interpreter.tape[this.interpreter.tapeIndex] = p.keyCode;
+			this.stack.pop();
+			break;
+		//OPC: 11 -> mouseIsPressed, hvilket bare er mouseIsPressed værdien, der sættes på tapen
+		case 11:
+			this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseIsPressed;
+			this.stack.pop();
+			break;
+		//OPC: 12 -> mouseX, hvilket bare er mouseX værdien, der sættes på tapen
+		case 12:
+			this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseX;
+			this.stack.pop();
+			break;
+		//OPC: 13 -> mouseY, hvilket bare er mouseY værdien, der sættes på tapen	
+		case 13:
+			this.interpreter.tape[this.interpreter.tapeIndex] = p.mouseY;
+			this.stack.pop();
+			break;
+		}
+	}
 
-				pushARG(ARG){
-					//Når der skubbes et argument propper vi argumentet i den øverste opcode's argument liste
-					let opc = this.stack[this.stack.length-1][0];
-					this.stack[this.stack.length-1][1].push(ARG);
-					//Her har vi opcodens argument liste
-					let opc_args = this.stack[this.stack.length-1][1];
-					//Her tjekker vi om vi kan køre nogle af opcodesne, det kan vi hvis de har det rette antal argumenter
-					switch (opc){
-						//OPC: 0 -> resizeCanvas(w, h)
-						case 0:
-							if(opc_args.length==2){
-								p.resizeCanvas(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-						//OPC: 1 -> fill(v)
-						case 1:
-							if(opc_args.length==1){
-								p.fill(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break;}
-						//OPC: 2 -> fill(r, g, b)
-						case 2:
-							if(opc_args.length==3){
-								p.fill(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-						//OPC: 3 -> background(v)
-						case 3:
-							if(opc_args.length==1){
-								p.background(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-						//OPC: 4 -> background(r, g, b)
-						case 4:
-							if(opc_args.length==3){
-								p.background(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-						//OPC: 5 -> rect(x, y, w, h)
-						case 5:
-							if(opc_args.length==4){
-								p.rect(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-						//OPC: 6 -> circle(x, y, d)
-						case 6:
-							if(opc_args.length==3){
-								p.circle(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-						//OPC: 7 -> triangle(x1, y1, x2, y2, x3, y3)
-						case 7:
-							if(opc_args.length==6){
-								p.triangle(...opc_args);
-								this.stack.pop();
-								break;
-							}
-							else{break}
-					}
-				}
-			}		
-			//Man kan først få adgang til disse elementer efter at de er etableret i DOM'en
-			window.onload = function () {
-				//Her sætter vi nogle af GUI elementernes startværdier
-				examplePrograms = document.getElementById("examples");
-				program = examplePrograms.options[examplePrograms.selectedIndex].value;
-				document.getElementById("code").value = program;
-				//Vi initiere vores interpreter med stack
-				interp = new InterpreterWithStack(program);
-				changeSpeed();
-			};
-			//Denne kører koden der står i kode vinduet på "en gang" og propper resultatet i output paragraph
-			//Denne funktion kan ikke kaldes fra GUI'en.
-			function run(){
-					program = document.getElementById("code").value;
-					interp = new InterpreterWithStack(program);
-					interp.stack = new Stack(interp);
-					p.resizeCanvas(255,255);
-					p.background(0);
-					p.fill(255);
-					interp.eval();
-					document.getElementById("output").innerHTML = interp.output;
-					updateTape();
+	pushARG(ARG){
+		//Når der skubbes et argument propper vi argumentet i den øverste opcode's argument liste
+		let opc = this.stack[this.stack.length-1][0];
+		this.stack[this.stack.length-1][1].push(ARG);
+		//Her har vi opcodens argument liste
+		let opc_args = this.stack[this.stack.length-1][1];
+		//Her tjekker vi om vi kan køre nogle af opcodesne, det kan vi hvis de har det rette antal argumenter
+		switch (opc){
+		//OPC: 0 -> resizeCanvas(w, h)
+		case 0:
+			if(opc_args.length==2){
+			p.resizeCanvas(...opc_args);
+			this.stack.pop();
+			break;
 			}
-			//Denne funktion opdatere tabellen i HTML'en, der repræsentere vores intepreters tape
-			function updateTape(){
-				//Hvis vores tape index er større en antallet af kollonner i tabllen
-				if (interp.tapeIndex >= 9){
-					//Sætter vi værdierne fra fem til højre for tapeIndexet, da vores tapeIndex vil være i den miderste kolonne
-					for (let i = 0; i < 10; i++){
-						let cell = document.getElementById("t"+i.toString())
-						cell.innerHTML = interp.tape[interp.tapeIndex+i-5];
-						cell.style.backgroundColor = "#bbb4b4";
-					}
-					//Vi highlighter den miderste kollonne
-					document.getElementById("t5").style.background="red";
-				}
-				//Hvis vores tape index ikke er er større en antallet af kollonner i tabllen
-				else{
-					//Sætter vi bare de første værdier hele vejen igennem
-					for (let i = 0; i < 10; i++){
-						let cell = document.getElementById("t"+i.toString())
-						cell.innerHTML = interp.tape[i];
-						cell.style.backgroundColor = "#bbb4b4";
-					}
-					//Hvor vi bare highlighter den kollonne vores tapeIndex er i
-					document.getElementById("t"+interp.tapeIndex.toString()).style.backgroundColor="red";
-				}
+			else{break}
+		//OPC: 1 -> fill(v)
+		case 1:
+			if(opc_args.length==1){
+			p.fill(...opc_args);
+			this.stack.pop();
+			break;
 			}
-			//Denne funktion stopper vores AutoStepthrough
-			function pauseProgram(){
-				//Vi stopper hovedIntervallet og resetter værdien
-                clearInterval(mainInterval);
-                mainInterval = null;
+			else{break;}
+		//OPC: 2 -> fill(r, g, b)
+		case 2:
+			if(opc_args.length==3){
+			p.fill(...opc_args);
+			this.stack.pop();
+			break;
 			}
-			//Denne funktion highlighter, det symbol, der køres lige nu
-			function highlight(){
-				let index = interp.programIndex;
-				//Det gør vi ved at redigere den indre HTML, hvor vi bare anvender <mark> tagget
-				innerHTML = program.substring(0,index-1) + "<mark style='font-size:25px'>" + program.substring(index-1,index) + "</mark>" + program.substring(index);
-				//Hvor vi så sætter den nye HTML ind på dets plads
-				document.getElementById("code_text").innerHTML = innerHTML;
-            }
-			function stepThrough(){
-				//Er vi igang med at gå trinvist igennem
-				if (doing_step_through){
-					//Vi kalder selvfølgelig step
-					interp.step();
-					//Derefter opdatere vi nogle af GUI elementerne
-					document.getElementById("output").innerHTML = interp.output;
-					updateTape();
-					highlight();
-					//Vi tjekker om programmet er færdigt så det ikke bliver ved med at køre og så stopper vi det, hvis det var igang med autostepthrough
-					if(interp.done){
-						doing_step_through = false;
-						pauseProgram();
-						interp.done = false;
-					}
-				}
-				//Hvis ikke vi er igang med at gå trinvist igennem
-				else{
-					program = document.getElementById("code").value;
-					interp = new InterpreterWithStack(program);
-					interp.stack = new Stack(interp);
-					p.resizeCanvas(255,255);
-					p.background(0);
-					p.fill(255);
-					interp.step();
-					document.getElementById("output").innerHTML = interp.output;
-					updateTape();
-					doing_step_through = true;
-					document.getElementById("code_text").innerHTML = program;
-					highlight();
-				}
+			else{break}
+		//OPC: 3 -> background(v)
+		case 3:
+			if(opc_args.length==1){
+			p.background(...opc_args);
+			this.stack.pop();
+			break;
 			}
-			function autoStepthrough(){
-                //Vi starter intervallet, hvis det ikke allerede er igang
-                if (mainInterval == null){
-                    mainInterval = setInterval(stepThrough, intervalSpeed);
-                }
+			else{break}
+		//OPC: 4 -> background(r, g, b)
+		case 4:
+			if(opc_args.length==3){
+			p.background(...opc_args);
+			this.stack.pop();
+			break;
 			}
-			function changeProgram(){
-				//Hvis der vælges et andet eksempel program, så skifter vi koden i kode vinduet
-				program = examplePrograms.options[examplePrograms.selectedIndex].value;
-				document.getElementById("code").value = program;
+			else{break}
+		//OPC: 5 -> rect(x, y, w, h)
+		case 5:
+			if(opc_args.length==4){
+			p.rect(...opc_args);
+			this.stack.pop();
+			break;
+			}
+			else{break}
+		//OPC: 6 -> circle(x, y, d)
+		case 6:
+			if(opc_args.length==3){
+			p.circle(...opc_args);
+			this.stack.pop();
+			break;
+			}
+			else{break}
+		//OPC: 7 -> triangle(x1, y1, x2, y2, x3, y3)
+		case 7:
+			if(opc_args.length==6){
+			p.triangle(...opc_args);
+			this.stack.pop();
+			break;
+			}
+			else{break}
+		}
+	}
+	}		
+	//Man kan først få adgang til disse elementer efter at de er etableret i DOM'en
+	window.onload = function () {
+	//Her sætter vi nogle af GUI elementernes startværdier
+	examplePrograms = document.getElementById("examples");
+	program = examplePrograms.options[examplePrograms.selectedIndex].value;
+	document.getElementById("code").value = program;
+	//Vi initiere vores interpreter med stack
+	interp = new InterpreterWithStack(program);
+	changeSpeed();
+	};
+	//Denne kører koden der står i kode vinduet på "en gang" og propper resultatet i output paragraph
+	//Denne funktion kan ikke kaldes fra GUI'en.
+	function run(){
+		program = document.getElementById("code").value;
+		interp = new InterpreterWithStack(program);
+		interp.stack = new Stack(interp);
+		p.resizeCanvas(255,255);
+		p.background(0);
+		p.fill(255);
+		interp.eval();
+		document.getElementById("output").innerHTML = interp.output;
+		updateTape();
+	}
+	//Denne funktion opdatere tabellen i HTML'en, der repræsentere vores intepreters tape
+	function updateTape(){
+		//Hvis vores tape index er større en antallet af kollonner i tabllen
+		if (interp.tapeIndex >= 9){
+			//Sætter vi værdierne fra fem til højre for tapeIndexet, da vores tapeIndex vil være i den miderste kolonne
+			for (let i = 0; i < 10; i++){
+				let cell = document.getElementById("t"+i.toString())
+				cell.innerHTML = interp.tape[interp.tapeIndex+i-5];
+				cell.style.backgroundColor = "#bbb4b4";
+			}
+		//Vi highlighter den miderste kollonne
+		document.getElementById("t5").style.background="red";
+		}
+		//Hvis vores tape index ikke er er større en antallet af kollonner i tabllen
+		else{
+			//Sætter vi bare de første værdier hele vejen igennem
+			for (let i = 0; i < 10; i++){
+				let cell = document.getElementById("t"+i.toString())
+				cell.innerHTML = interp.tape[i];
+				cell.style.backgroundColor = "#bbb4b4";
+			}
+			//Hvor vi bare highlighter den kollonne vores tapeIndex er i
+		document.getElementById("t"+interp.tapeIndex.toString()).style.backgroundColor="red";
+		}
+	}
+	//Denne funktion stopper vores AutoStepthrough
+	function pauseProgram(){
+		//Vi stopper hovedIntervallet og resetter værdien
+		clearInterval(mainInterval);
+		mainInterval = null;
+	}
+	//Denne funktion highlighter, det symbol, der køres lige nu
+	function highlight(){
+		let index = interp.programIndex;
+		//Det gør vi ved at redigere den indre HTML, hvor vi bare anvender <mark> tagget
+		innerHTML = program.substring(0,index-1) + "<mark style='font-size:25px'>" + program.substring(index-1,index) + "</mark>" + program.substring(index);
+		//Hvor vi så sætter den nye HTML ind på dets plads
+		document.getElementById("code_text").innerHTML = innerHTML;
+	}
+	function stepThrough(){
+		//Er vi igang med at gå trinvist igennem
+		if (doing_step_through){
+			//Vi kalder selvfølgelig step
+			interp.step();
+			//Derefter opdatere vi nogle af GUI elementerne
+			document.getElementById("output").innerHTML = interp.output;
+			updateTape();
+			highlight();
+			//Vi tjekker om programmet er færdigt så det ikke bliver ved med at køre og så stopper vi det, hvis det var igang med autostepthrough
+			if(interp.done){
 				doing_step_through = false;
+				pauseProgram();
+				interp.done = false;
 			}
-			function changeSpeed(){
-				//Vi får den ønskede intervalspeed fra slideren og sætter intervalSpeed variablen til denne værdi
-				intervalSpeed = document.getElementById("speed_slider").value;
-				//Vi opdatere den viste hastighed
-				document.getElementById("speed_display").innerHTML = "Time between each step: " + intervalSpeed.toString() + " ms";
-			}
-		</script>
+		}
+		//Hvis ikke vi er igang med at gå trinvist igennem
+		else{
+			program = document.getElementById("code").value;
+			interp = new InterpreterWithStack(program);
+			interp.stack = new Stack(interp);
+			p.resizeCanvas(255,255);
+			p.background(0);
+			p.fill(255);
+			interp.step();
+			document.getElementById("output").innerHTML = interp.output;
+			updateTape();
+			doing_step_through = true;
+			document.getElementById("code_text").innerHTML = program;
+			highlight();
+		}
+	}
+	function autoStepthrough(){
+		//Vi starter intervallet, hvis det ikke allerede er igang
+		if (mainInterval == null){
+			mainInterval = setInterval(stepThrough, intervalSpeed);
+		}
+	}
+	function changeProgram(){
+		//Hvis der vælges et andet eksempel program, så skifter vi koden i kode vinduet
+		program = examplePrograms.options[examplePrograms.selectedIndex].value;
+		document.getElementById("code").value = program;
+		doing_step_through = false;
+	}
+	function changeSpeed(){
+		//Vi får den ønskede intervalspeed fra slideren og sætter intervalSpeed variablen til denne værdi
+		intervalSpeed = document.getElementById("speed_slider").value;
+		//Vi opdatere den viste hastighed
+		document.getElementById("speed_display").innerHTML = "Time between each step: " + intervalSpeed.toString() + " ms";
+	}
+	</script>
 
-	<h1>Brainfuck with P5</h1>
-	<p>This was made as a school project. Find more information at <a href="https://github.com/simon220902/BrainFuckProcessing">the readme of my git.</a></p>
-	<h3>Tape</h3>
-	<!--Dette er vores tape-->
-	<div class="table-responsive">
-		<table class="table">
-			<thead style="background-color: #ffffff21">
-				<tr>
-					<th id="t0">0</th>
-					<th id="t1">0</th>
-					<th id="t2">0</th>
-					<th id="t3">0</th>
-					<th id="t4">0</th>
-					<th id="t5">0</th>
-					<th id="t6">0</th>
-					<th id="t7">0</th>
-					<th id="t8">0</th>
-					<th id="t9">0</th>
-				</tr>
-		</table>
-	</div>
-	<h3>Code</h3>
-	<textarea id="code" cols=100 rows=20></textarea>
-	<h3>Code being executed</h3>
-	<p id="code_text"></p>
-	<!--Nedenstående var run knappen, der kørte hele programmet igennem i en køre, men dette virker ikke helt med nogle af de grafiske funktioner-->
-	<!--<button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>-->
-    <button class="btn btn-primary" style="background-color:#1c6643;" onclick="stepThrough()">Step</button>
-    <button class="btn btn-primary" style="background-color:#1c6643;" onclick="autoStepthrough()">AutoStep</button>
-	<button class="btn btn-primary" style="background-color:#1c6643;" onclick="pauseProgram()">Pause</button>
-	<!--Eksempelprogrammerne, med deres værdi value feltet-->
-	<select id="examples" onchange="changeProgram()">
-		<option value="++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++." >Hello world</option>
-		<option selected="selected" value="Farve setup
+<h1>Brainfuck with P5</h1>
+<p>This was made as a school project. Find more information at <a href="https://github.com/simon220902/BrainFuckProcessing">the readme of my git.</a></p>
+<h3>Tape</h3>
+<!--Dette er vores tape-->
+<div class="table-responsive">
+<table class="table">
+	<thead style="background-color: #ffffff21">
+	<tr>
+		<th id="t0">0</th>
+		<th id="t1">0</th>
+		<th id="t2">0</th>
+		<th id="t3">0</th>
+		<th id="t4">0</th>
+		<th id="t5">0</th>
+		<th id="t6">0</th>
+		<th id="t7">0</th>
+		<th id="t8">0</th>
+		<th id="t9">0</th>
+	</tr>
+</table>
+</div>
+<h3>Code</h3>
+<textarea id="code" cols=100 rows=20></textarea>
+<h3>Code being executed</h3>
+<p id="code_text"></p>
+<!--Nedenstående var run knappen, der kørte hele programmet igennem i en køre, men dette virker ikke helt med nogle af de grafiske funktioner-->
+<!--<button class="btn btn-primary" style="background-color:#bbb4b4;" onclick="run()">Run</button>-->
+<button class="btn btn-primary" style="background-color:#1c6643;" onclick="stepThrough()">Step</button>
+<button class="btn btn-primary" style="background-color:#1c6643;" onclick="autoStepthrough()">AutoStep</button>
+<button class="btn btn-primary" style="background-color:#1c6643;" onclick="pauseProgram()">Pause</button>
+<!--Eksempelprogrammerne, med deres værdi value feltet-->
+<select id="examples" onchange="changeProgram()">
+<option value="++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++." >Hello world</option>
+<option selected="selected" value="Farve setup
 - Vi sætter det første tal på tapen til 255
 > Vi beholde det  tal på tapen til 255
 Nu laver vi så de basale koordinater vi regner med at skærmen er 255x255
@@ -351,7 +351,7 @@ Nu skal vi så bruge 64
 <++++
 [>++++++++<-]
 >;">Hus</option>
-		<option value="ADVARSEL! Lad vær med at køre dette med run knappen kør det kun med AutoStepThrough ellers crasher det!!!
+<option value="ADVARSEL! Lad vær med at køre dette med run knappen kør det kun med AutoStepThrough ellers crasher det!!!
 Okay så hvad er ideen at lave en cirkel der hvor musen er (cirkel OPCODE I mousex OPCODE I mousey OPCODE I cirkel r) Vi laver cirklens opcode ++++++ Vi laver cirklens radius >>+++++++ [>++++++++++<-] << 
 [
 vi starter med at skubbe tegnCirkel :
@@ -362,19 +362,18 @@ Så erstattes værdien og vi skubber den på som argument ;
 nu mangler vi bare radius > ;
 og så går vi tilbage til tegn cirkels opcode og gør det samme igen <<<
 ]">Cirkler ved mus</option>
-		<option value=">+++++++++[<+++++++++++>-]<[>[-]>[-]<<[>+>+<<-]>>[<<+>>-]>>> [-]<<<+++++++++<[>>>+<<[>+>[-]<<-]>[<+>-]>[<<++++++++++>>>+< -]<<-<-]+++++++++>[<->-]>>+>[<[-]<<+>>>-]>[-]+<<[>+>-<<-]<<< [>>+>+<<<-]>>>[<<<+>>>-]>[<+>-]<<-[>[-]<[-]]>>+<[>[-]<-]<+++ +++++[<++++++<++++++>>-]>>>[>+>+<<-]>>[<<+>>-]<[<<<<<.>>>>>- ]<<<<<<.>>[-]>[-]++++[<++++++++>-]<.>++++[<++++++++>-]<++.>+ ++++[<+++++++++>-]<.><+++++..--------.-------.>>[>>+>+<<<-]> >>[<<<+>>>-]<[<<<<++++++++++++++.>>>>-]<<<<[-]>++++[<+++++++ +>-]<.>+++++++++[<+++++++++>-]<--.---------.>+++++++[<------ ---->-]<.>++++++[<+++++++++++>-]<.+++..+++++++++++++.>++++++ ++[<---------->-]<--.>+++++++++[<+++++++++>-]<--.-.>++++++++ [<---------->-]<++.>++++++++[<++++++++++>-]<++++.----------- -.---.>+++++++[<---------->-]<+.>++++++++[<+++++++++++>-]<-. >++[<----------->-]<.+++++++++++..>+++++++++[<---------->-]< -----.---.>>>[>+>+<<-]>>[<<+>>-]<[<<<<<.>>>>>-]<<<<<<.>>>+++ +[<++++++>-]<--.>++++[<++++++++>-]<++.>+++++[<+++++++++>-]<. ><+++++..--------.-------.>>[>>+>+<<<-]>>>[<<<+>>>-]<[<<<<++ ++++++++++++.>>>>-]<<<<[-]>++++[<++++++++>-]<.>+++++++++[<++ +++++++>-]<--.---------.>+++++++[<---------->-]<.>++++++[<++ +++++++++>-]<.+++..+++++++++++++.>++++++++++[<---------->-]< -.---.>+++++++[<++++++++++>-]<++++.+++++++++++++.++++++++++. ------.>+++++++[<---------->-]<+.>++++++++[<++++++++++>-]<-. -.---------.>+++++++[<---------->-]<+.>+++++++[<++++++++++>- ]<--.+++++++++++.++++++++.---------.>++++++++[<---------->-] <++.>+++++[<+++++++++++++>-]<.+++++++++++++.----------.>++++ +++[<---------->-]<++.>++++++++[<++++++++++>-]<.>+++[<-----> -]<.>+++[<++++++>-]<..>+++++++++[<--------->-]<--.>+++++++[< ++++++++++>-]<+++.+++++++++++.>++++++++[<----------->-]<++++ .>+++++[<+++++++++++++>-]<.>+++[<++++++>-]<-.---.++++++.---- ---.----------.>++++++++[<----------->-]<+.---.[-]<<<->[-]>[ -]<<[>+>+<<-]>>[<<+>>-]>>>[-]<<<+++++++++<[>>>+<<[>+>[-]<<-] >[<+>-]>[<<++++++++++>>>+<-]<<-<-]+++++++++>[<->-]>>+>[<[-]< <+>>>-]>[-]+<<[>+>-<<-]<<<[>>+>+<<<-]>>>[<<<+>>>-]<>>[<+>-]< <-[>[-]<[-]]>>+<[>[-]<-]<++++++++[<++++++<++++++>>-]>>>[>+>+ <<-]>>[<<+>>-]<[<<<<<.>>>>>-]<<<<<<.>>[-]>[-]++++[<++++++++> -]<.>++++[<++++++++>-]<++.>+++++[<+++++++++>-]<.><+++++..--- -----.-------.>>[>>+>+<<<-]>>>[<<<+>>>-]<[<<<<++++++++++++++ .>>>>-]<<<<[-]>++++[<++++++++>-]<.>+++++++++[<+++++++++>-]<- -.---------.>+++++++[<---------->-]<.>++++++[<+++++++++++>-] <.+++..+++++++++++++.>++++++++[<---------->-]<--.>+++++++++[ <+++++++++>-]<--.-.>++++++++[<---------->-]<++.>++++++++[<++ ++++++++>-]<++++.------------.---.>+++++++[<---------->-]<+. >++++++++[<+++++++++++>-]<-.>++[<----------->-]<.+++++++++++ ..>+++++++++[<---------->-]<-----.---.+++.---.[-]<<<]">Bottles</option>
-		<option value="26 +++++ +++++ +++++ +++++ +++++ +>
-				A  +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++
-				   <
-				   [>.+<-]">Alphabet</option>		
-	</select>
-	<h4>Speed of AutoStep</h4>
-	<input type="range" min="0" max="500" step="1" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
-    <p id="speed_display"></p>
-    <h3>Output</h3>
-	<p id="output"></p>
-	<h3>Graphical output</h3>
-	<!--Vores p5 tegne vindues-->
-	<div id='drawing_window'></div>
+<option value="26 +++++ +++++ +++++ +++++ +++++ +>
+	A  +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++ +++++
+		<
+		[>.+<-]">Alphabet</option>		
+</select>
+<h4>Speed of AutoStep</h4>
+<input type="range" min="0" max="500" step="1" value="100" class="slider" id="speed_slider" onchange="changeSpeed()">
+<p id="speed_display"></p>
+<h3>Output</h3>
+<p id="output"></p>
+<h3>Graphical output</h3>
+<!--Vores p5 tegne vindues-->
+<div id='drawing_window'></div>
 </body>
 </html>
